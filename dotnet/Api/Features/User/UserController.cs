@@ -1,23 +1,45 @@
 ﻿using Api.Data;
+using Api.Features.User;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Features
 {
-    [ApiController]
     [Route("user")]
+    [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly ApiContext _context;
+        private readonly IMediator _mediator;
 
-        public UserController(ApiContext context)
+        public UserController(IMediator mediator)
         {
-            _context = context;
+            _mediator = mediator;
         }
 
-        [HttpGet]
-        public IActionResult Index()
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateUserRequest request)
         {
-            return Ok();
+            var result = await _mediator.Send(request.ToCommand());
+            return Ok(result);
         }
     }
+
+    public class CreateUserRequest
+    {
+        public string Email { get; }
+        public string Password { get; }
+
+        public CreateUserRequest(string email, string password)
+        {
+            Email = email;
+            Password = password;
+        }
+    }
+
+    public static class CreateUserRequestExtensions
+    {
+        public static CreateUserCommand ToCommand(this CreateUserRequest request) => new CreateUserCommand(request.Email, request.Password);
+    }
+
 }
