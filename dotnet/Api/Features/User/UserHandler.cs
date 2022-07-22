@@ -1,6 +1,6 @@
 ﻿using Api.Data;
 using Api.Domain;
-using Api.Utilities;
+using Api.Utilities.PasswordManager;
 using MediatR;
 
 namespace Api.Features.User

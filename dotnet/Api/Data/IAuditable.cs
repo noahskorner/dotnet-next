@@ -9,7 +9,6 @@ namespace Api.Data
         DateTimeOffset UpdatedAt { get; set; }
     }
 
-    [Index(nameof(CreatedAt))]
     public class Auditable : Entity, IAuditable
     {
         public DateTimeOffset CreatedAt { get; set; }

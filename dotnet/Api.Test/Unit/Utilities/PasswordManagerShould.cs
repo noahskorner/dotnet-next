@@ -1,4 +1,5 @@
 using Api.Utilities;
+using Api.Utilities.PasswordManager;
 
 namespace Api.Test.Unit.Utilities
 {

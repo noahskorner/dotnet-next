@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 
-namespace Api.Utilities
+namespace Api.Utilities.PasswordManager
 {
     public class PasswordManager : IPasswordManager
     {

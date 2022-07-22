@@ -1,4 +1,5 @@
 ﻿using Api.Data;
+using Api.Features.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -29,26 +30,13 @@ namespace Api.Domain
             entity.Property(x => x.Password)
                   .IsRequired()
                   .HasMaxLength(DataConfiguration.SHORT_STRING_LENGTH);
+
+            entity.HasIndex(x => x.CreatedAt);
         }
     }
 
     public static class UserExtensions
     {
-        public static UserDto ToDto(this User user) => new UserDto(user.Id, user.Email, user.Password);
+        public static UserDto ToDto(this User user) => new UserDto(user.Id, user.Email);
     }
-
-    public class UserDto
-    {
-        public long Id { get; }
-        public string Email { get; }
-        public string Password { get; }
-
-        public UserDto(long id, string email, string password)
-        {
-            Id = id;
-            Email = email;
-            Password = password;
-        }
-    }
-
 }
