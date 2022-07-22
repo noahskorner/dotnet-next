@@ -9,5 +9,10 @@ namespace Api.Data
         public ApiContext(DbContextOptions options) : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new UserMap());
+        }
     }
 }

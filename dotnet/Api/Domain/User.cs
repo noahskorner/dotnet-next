@@ -1,5 +1,4 @@
 ﻿using Api.Data;
-using Api.Features.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,6 +16,9 @@ namespace Api.Domain
         {
             entity.ToTable("User");
 
+            entity.Property(x => x.Id)
+                  .ValueGeneratedOnAdd();
+
             entity.Property(x => x.Email)
                   .IsRequired()
                   .HasMaxLength(DataConfiguration.SHORT_STRING_LENGTH);
@@ -33,7 +35,6 @@ namespace Api.Domain
     public static class UserExtensions
     {
         public static UserDto ToDto(this User user) => new UserDto(user.Id, user.Email, user.Password);
-    
     }
 
     public class UserDto

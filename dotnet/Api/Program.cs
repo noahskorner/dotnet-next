@@ -1,4 +1,5 @@
 using Api.Data;
+using Api.Utilities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -30,6 +31,9 @@ builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<IPasswordManager, PasswordManager>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

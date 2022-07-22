@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Features
 {
-    [Route("user")]
+    [Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -16,12 +16,11 @@ namespace Api.Features
             _mediator = mediator;
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserRequest request)
         {
             var result = await _mediator.Send(request.ToCommand());
-            return Ok(result);
+            return StatusCode(201, result);
         }
     }
 
