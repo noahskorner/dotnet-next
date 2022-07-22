@@ -1,16 +1,9 @@
 ﻿using Api.Data;
-using Api.Features.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Api.Domain
+namespace Api.Domain.Users
 {
-    public class User : Auditable
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
-
     public class UserMap : IEntityTypeConfiguration<User>
     {
         public void Configure(EntityTypeBuilder<User> entity)
@@ -33,10 +26,5 @@ namespace Api.Domain
 
             entity.HasIndex(x => x.CreatedAt);
         }
-    }
-
-    public static class UserExtensions
-    {
-        public static UserDto ToDto(this User user) => new UserDto(user.Id, user.Email);
     }
 }

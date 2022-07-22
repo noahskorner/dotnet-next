@@ -1,5 +1,5 @@
 using Api.Data;
-using Api.Utilities.PasswordManager;
+using Api.Services.PasswordManager;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;

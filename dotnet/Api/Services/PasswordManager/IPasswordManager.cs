@@ -1,4 +1,4 @@
-﻿namespace Api.Utilities.PasswordManager
+﻿namespace Api.Services.PasswordManager
 {
     public interface IPasswordManager
     {

@@ -1,9 +1,9 @@
 ﻿using Api.Data;
-using Api.Domain;
-using Api.Utilities.PasswordManager;
+using Api.Domain.Users;
+using Api.Services.PasswordManager;
 using MediatR;
 
-namespace Api.Features.User
+namespace Api.Features.Users
 {
     public class CreateUserCommand : IRequest<UserDto>
     {
@@ -32,7 +32,7 @@ namespace Api.Features.User
         {
             var hashedPassword = _passwordManager.Hash(request.Password);
 
-            var user = new Api.Domain.User() { 
+            var user = new User(){ 
                 Email = request.Email,
                 Password = hashedPassword
             };

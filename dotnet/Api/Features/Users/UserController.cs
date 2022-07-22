@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Features.User
+namespace Api.Features.Users
 {
     [Route("api/user")]
     [ApiController]
