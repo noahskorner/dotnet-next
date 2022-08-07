@@ -1,15 +1,15 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Features.Users
+namespace Api.Features.Users.Post
 {
     [Route("api/user")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class Post : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public UserController(IMediator mediator)
+        public Post(IMediator mediator)
         {
             _mediator = mediator;
         }

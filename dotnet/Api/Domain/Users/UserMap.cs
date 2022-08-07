@@ -24,6 +24,12 @@ namespace Api.Domain.Users
                   .IsRequired()
                   .HasMaxLength(DataConfiguration.SHORT_STRING_LENGTH);
 
+            entity.Property(x => x.EmailVerificationToken)
+                  .HasMaxLength(DataConfiguration.SHORT_STRING_LENGTH);
+
+            entity.Property(x => x.IsEmailVerified)
+                  .HasDefaultValue(false);
+
             entity.HasIndex(x => x.CreatedAt);
         }
     }
