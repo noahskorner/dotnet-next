@@ -14,7 +14,11 @@ namespace Api.Features.Users.Create
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Creates a new user
+        /// </summary>
         [HttpPost]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Create(CreateUserRequest request)
         {
             var result = await _mediator.Send(request.ToCommand());

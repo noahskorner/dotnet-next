@@ -5,6 +5,7 @@ using Api.Services.MailService;
 using Api.Services.PasswordService;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 namespace Api
@@ -44,7 +45,18 @@ namespace Api
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddControllers();
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1",
+                    new OpenApiInfo
+                    {
+                        Title = "Dotnet Next Api",
+                        Version = "v1",
+                    });
+
+                var filePath = Path.Combine(AppContext.BaseDirectory, "Api.xml");
+                options.IncludeXmlComments(filePath);
+            });
 
             services.AddSingleton<IPasswordService, PasswordService>();
             services.AddSingleton<IMailService, MailService>();
