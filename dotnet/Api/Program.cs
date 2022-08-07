@@ -1,23 +1,27 @@
 using Api;
+using Api.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.AddConfiguration();
+builder.Configuration.AddJsonFile("appsettings.json");
+var corsConfig = builder.Configuration.GetSection(CorsConfiguration.Cors).Get<CorsConfiguration>();
+var sqlServerConfig = builder.Configuration.GetSection(SqlServerConfiguration.SqlServer).Get<SqlServerConfiguration>();
 
 // Add services to the container.
-builder.AddCors();
-builder.AddSqlServer();
+builder.Services.AddConfiguration(builder.Configuration);
+builder.Services.AddCors(corsConfig);
+builder.Services.AddSqlServer(sqlServerConfig);
 builder.Services.AddServices();
 
-var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
-app.UseCors("Default");
+app.UseCors(corsConfig.PolicyName);
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

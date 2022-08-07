@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 
-namespace Api.Services.PasswordManager
+namespace Api.Services.PasswordService
 {
-    public class PasswordManager : IPasswordManager
+    public class PasswordService : IPasswordService
     {
-        string IPasswordManager.Hash(string password)
+        string IPasswordService.Hash(string password)
         {
             if (password.Contains(".")) throw new InvalidPasswordException();
 
@@ -17,7 +17,7 @@ namespace Api.Services.PasswordManager
             return $"{hashedPassword}.{base64Salt}";
         }
 
-        bool IPasswordManager.Verify(string password, string hashedPassword)
+        bool IPasswordService.Verify(string password, string hashedPassword)
         {
             try
             {

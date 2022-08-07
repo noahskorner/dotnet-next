@@ -1,17 +1,17 @@
-using Api.Services.PasswordManager;
+using Api.Services.PasswordService;
 
-namespace Api.Test.Unit.Utilities
+namespace Api.Test.Unit.Services
 {
-    public class PasswordManagerShould
+    public class PasswordServiceShould
     {
         private Random _random;
-        private IPasswordManager _passwordManager;
+        private IPasswordService _sut;
 
         [SetUp]
         public void Setup()
         {
             _random = new Random();
-            _passwordManager = new PasswordManager();
+            _sut = new PasswordService();
         }
 
         [Test]
@@ -21,7 +21,7 @@ namespace Api.Test.Unit.Utilities
             var password = _random.Next().ToString();
 
             // Act
-            var result = _passwordManager.Hash(password);
+            var result = _sut.Hash(password);
 
             // Assert
             Assert.That(password, Is.Not.EqualTo(result));
@@ -34,8 +34,8 @@ namespace Api.Test.Unit.Utilities
             var password = _random.Next().ToString();
 
             // Act
-            var result1 = _passwordManager.Hash(password);
-            var result2 = _passwordManager.Hash(password);
+            var result1 = _sut.Hash(password);
+            var result2 = _sut.Hash(password);
 
             // Assert
             Assert.That(result1, Is.Not.EqualTo(result2));
@@ -48,7 +48,7 @@ namespace Api.Test.Unit.Utilities
             var password = $"{_random.Next()}.";
 
             // Act && Assert
-            Assert.Throws<InvalidPasswordException>(() => _passwordManager.Hash(password));
+            Assert.Throws<InvalidPasswordException>(() => _sut.Hash(password));
         }
 
         [Test]
@@ -56,10 +56,10 @@ namespace Api.Test.Unit.Utilities
         {
             // Arrange
             var password = _random.Next().ToString();
-            var hashedPassword = _passwordManager.Hash(password);
+            var hashedPassword = _sut.Hash(password);
 
             // Act
-            var result = _passwordManager.Verify(password, hashedPassword);
+            var result = _sut.Verify(password, hashedPassword);
 
             // Assert
             Assert.True(result);
@@ -73,7 +73,7 @@ namespace Api.Test.Unit.Utilities
             var hashedPassword = _random.Next().ToString();
 
             // Act
-            var result = _passwordManager.Verify(password, hashedPassword);
+            var result = _sut.Verify(password, hashedPassword);
 
             // Assert
             Assert.False(result);

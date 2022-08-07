@@ -2,9 +2,16 @@
 {
     public class User : Auditable
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public User(string email, string password)
+        {
+            Email = email;
+            Password = password;
+        }
+
+        public string Email { get; }
+        public string Password { get; }
         public string EmailVerificationToken { get; set; }
-        public string IsEmailVerified{ get; set; }
+        public bool IsEmailVerified { get; }
+
     }
 }

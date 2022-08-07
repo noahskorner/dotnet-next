@@ -25,6 +25,7 @@ namespace Api.Domain.Users
                   .HasMaxLength(DataConfiguration.SHORT_STRING_LENGTH);
 
             entity.Property(x => x.EmailVerificationToken)
+                  .IsRequired(false)
                   .HasMaxLength(DataConfiguration.SHORT_STRING_LENGTH);
 
             entity.Property(x => x.IsEmailVerified)

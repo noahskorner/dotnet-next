@@ -1,6 +1,6 @@
-﻿namespace Api.Services.PasswordManager
+﻿namespace Api.Services.PasswordService
 {
-    public interface IPasswordManager
+    public interface IPasswordService
     {
         string Hash(string password);
 
