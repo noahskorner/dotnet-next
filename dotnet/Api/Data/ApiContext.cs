@@ -1,4 +1,5 @@
-﻿using Api.Domain.Users;
+﻿using Api.Data.Maps;
+using Api.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Data

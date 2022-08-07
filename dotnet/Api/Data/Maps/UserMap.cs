@@ -1,8 +1,8 @@
-﻿using Api.Data;
+﻿using Api.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Api.Domain.Users
+namespace Api.Data.Maps
 {
     public class UserMap : IEntityTypeConfiguration<User>
     {
