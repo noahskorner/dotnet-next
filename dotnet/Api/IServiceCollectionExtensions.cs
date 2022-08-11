@@ -1,12 +1,16 @@
 ﻿using Api.Configuration;
 using Api.Data;
+using Api.PipelineBehaviors;
+using Api.Providers.MailProvider;
 using Api.Services.JwtService;
-using Api.Services.MailService;
 using Api.Services.PasswordService;
+using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Text.Json;
 
 namespace Api
 {
@@ -27,7 +31,8 @@ namespace Api
             {
                 options.AddPolicy(name: config.PolicyName, policy =>
                 {
-                    policy.WithOrigins(config.AllowedOrigins);
+                    policy.WithOrigins(config.AllowedOrigins)
+                    .AllowAnyMethod();
                 });
             });
         }
@@ -43,7 +48,18 @@ namespace Api
         public static void AddServices(this IServiceCollection services)
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
-            services.AddControllers();
+            services
+                .AddControllers(options =>
+                {
+                    options.Filters.Add(new ProducesAttribute("application/json"));
+                })
+                .AddJsonOptions(options  =>
+                {
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                    options.JsonSerializerOptions.WriteIndented = true;
+                });
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(options =>
             {
@@ -57,9 +73,11 @@ namespace Api
                 var filePath = Path.Combine(AppContext.BaseDirectory, "Api.xml");
                 options.IncludeXmlComments(filePath);
             });
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             services.AddSingleton<IPasswordService, PasswordService>();
-            services.AddSingleton<IMailService, MailService>();
+            services.AddSingleton<IMailProvider, SystemMailProvider>();
             services.AddSingleton<IJwtService, JwtService>();
         }
     }

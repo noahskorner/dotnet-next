@@ -1,12 +1,12 @@
 ﻿using Api.Data.Maps;
-using Api.Domain.Users;
+using Api.Domain.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Data
 {
     public class ApiContext : Context
     {
-        public DbSet<User> User { get; set; }
+        public DbSet<UserEntity> User { get; set; }
         public ApiContext(DbContextOptions options) : base(options)
         {
         }

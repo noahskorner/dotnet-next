@@ -2,8 +2,8 @@
 
 namespace Api.Test.Unit.Services
 {
-    public class MailServiceShould
+    public class SystemMailProviderShould
     {
-        private IMailService _sut;
+        private IMailProvider _sut;
     }
 }

@@ -2,14 +2,14 @@
 using System.Net;
 using System.Net.Mail;
 
-namespace Api.Services.MailService
+namespace Api.Providers.MailProvider
 {
-    public class MailService : IMailService
+    public class SystemMailProvider : IMailProvider
     {
         private readonly SmtpClient _client;
         private readonly SmtpConfiguration _config;
 
-        public MailService(SmtpConfiguration config)
+        public SystemMailProvider(SmtpConfiguration config)
         {
             _config = config;
             _client = new SmtpClient()

@@ -24,7 +24,7 @@ namespace Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Api.Domain.Users.User", b =>
+            modelBuilder.Entity("Api.Domain.User.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

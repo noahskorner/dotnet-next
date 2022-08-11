@@ -1,6 +1,7 @@
-﻿using MediatR;
+﻿using Api.Domain.User;
+using MediatR;
 
-namespace Api.Features.Users.Create
+namespace Api.Features.User.Create
 {
     public class CreateUserCommand : IRequest<UserDto>
     {

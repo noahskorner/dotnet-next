@@ -1,4 +1,4 @@
-﻿namespace Api.Features.Users.Create
+﻿namespace Api.Features.User.Create
 {
     public class EmailVerificationException : Exception
     {

@@ -1,8 +1,8 @@
-﻿namespace Api.Domain.Users
+﻿namespace Api.Domain.User
 {
-    public class User : Auditable
+    public class UserEntity : Auditable
     {
-        public User(string email, string password)
+        public UserEntity(string email, string password)
         {
             Email = email;
             Password = password;
@@ -12,6 +12,5 @@
         public string Password { get; }
         public string EmailVerificationToken { get; set; }
         public bool IsEmailVerified { get; }
-
     }
 }

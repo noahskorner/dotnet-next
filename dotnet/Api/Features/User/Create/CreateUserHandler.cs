@@ -1,31 +1,31 @@
 ﻿using Api.Configuration;
 using Api.Data;
-using Api.Domain.Users;
+using Api.Domain.User;
+using Api.Providers.MailProvider;
 using Api.Services.JwtService;
-using Api.Services.MailService;
 using Api.Services.PasswordService;
 using MediatR;
 
-namespace Api.Features.Users.Create
+namespace Api.Features.User.Create
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
     {
         private readonly ApiContext _context;
         private readonly JwtConfiguration _jwtConfig;
         private readonly IPasswordService _passwordService;
-        private readonly IMailService _mailService;
+        private readonly IMailProvider _mailProvider;
         private readonly IJwtService _jwtService;
 
         public CreateUserCommandHandler(
             ApiContext context,
             IPasswordService passwordService,
-            IMailService mailService,
+            IMailProvider mailProvider,
             JwtConfiguration jwtConfig,
             IJwtService jwtService)
         {
             _context = context;
             _passwordService = passwordService;
-            _mailService = mailService;
+            _mailProvider = mailProvider;
             _jwtConfig = jwtConfig;
             _jwtService = jwtService;
         }
@@ -34,7 +34,7 @@ namespace Api.Features.Users.Create
         {
             var hashedPassword = _passwordService.Hash(request.Password);
 
-            var user = new User(request.Email, hashedPassword);
+            var user = new UserEntity(request.Email, hashedPassword);
 
             await _context.User.AddAsync(user);
             await _context.SaveChangesAsync();
@@ -49,7 +49,7 @@ namespace Api.Features.Users.Create
         private async Task<string> SendVerificationEmail(long userId, string email)
         {
             var token = _jwtService.GenerateToken(_jwtConfig.EmailVerificationSecret);
-            var emailSuccess = await _mailService.SendMailAsync(email, "Welcome", $"http://localhost:3000/user/{userId}/verify/{token}");
+            var emailSuccess = await _mailProvider.SendMailAsync(email, "Welcome", $"http://localhost:3000/user/{userId}/verify/{token}");
 
             if (!emailSuccess) throw new EmailVerificationException(userId, email);
 

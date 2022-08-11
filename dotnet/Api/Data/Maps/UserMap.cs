@@ -1,12 +1,12 @@
-﻿using Api.Domain.Users;
+﻿using Api.Domain.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Api.Data.Maps
 {
-    public class UserMap : IEntityTypeConfiguration<User>
+    public class UserMap : IEntityTypeConfiguration<UserEntity>
     {
-        public void Configure(EntityTypeBuilder<User> entity)
+        public void Configure(EntityTypeBuilder<UserEntity> entity)
         {
             entity.ToTable("User");
 

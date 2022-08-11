@@ -1,6 +1,6 @@
-﻿namespace Api.Services.MailService
+﻿namespace Api.Providers.MailProvider
 {
-    public interface IMailService
+    public interface IMailProvider
     {
         Task<bool> SendMailAsync(string to, string subject, string body);
     }
