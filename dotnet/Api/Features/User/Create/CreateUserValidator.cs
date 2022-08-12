@@ -9,12 +9,13 @@ namespace Api.Features.User.Create
         public CreateUserValidator()
         {
             RuleFor(x => x.Email)
-                .EmailAddress();
+                .EmailAddress()
+                .WithMessage("Must provide a valid ");
 
             RuleFor(x => x.Password)
                 .MinimumLength(DataConfiguration.MIN_PASSWORD_LENGTH)
                 .MaximumLength(DataConfiguration.SHORT_STRING_LENGTH)
-                .WithMessage(x => $"{nameof(x.Password)} must be between {DataConfiguration.MIN_PASSWORD_LENGTH}-{DataConfiguration.SHORT_STRING_LENGTH} characters.");
+                .WithMessage($"{nameof(CreateUserRequest.Password)} must be between {DataConfiguration.MIN_PASSWORD_LENGTH}-{DataConfiguration.SHORT_STRING_LENGTH} characters.");
             RuleFor(x => x.Password)
                 .Must(password =>
                 {
@@ -22,7 +23,7 @@ namespace Api.Features.User.Create
 
                     return hasUpperChar.IsMatch(password);
                 })
-                .WithMessage(x => $"{nameof(x.Password)} must contain an uppercase letter.");
+                .WithMessage($"{nameof(CreateUserRequest.Password)} must contain an uppercase letter.");
             RuleFor(x => x.Password)
                 .Must(password =>
                 {
@@ -30,15 +31,24 @@ namespace Api.Features.User.Create
 
                     return hasNumber.IsMatch(password);
                 })
-                .WithMessage(x => $"{nameof(x.Password)} must contain a number.");
+                .WithMessage($"{nameof(CreateUserRequest.Password)} must contain a number.");
             RuleFor(x => x.Password)
                 .Must(password =>
                 {
-                    var hasSymbols = new Regex(@"[!@#$%^&*()_+=\[{\]};:<>|./?,-]");
+                    var hasSymbols = new Regex(@"[!@#$%^&*()_+=\[{\]};:<>|/?,-]");
 
                     return hasSymbols.IsMatch(password);
                 })
-                .WithMessage(x => $"{nameof(x.Password)} must contain a symbol.");
+                .WithMessage($"{nameof(CreateUserRequest.Password)} must contain a symbol.");
+            RuleFor(x => x.Password)
+                .Must(password =>
+                {
+                    var validCharacters = new Regex(@"\A[!@#$%^&*()_+=\[{\]};:<>|/?,A-Za-z0-9]\Z");
+                    var isMatch = validCharacters.IsMatch(password);
+
+                    return validCharacters.IsMatch(password);
+                })
+                .WithMessage($"{nameof(CreateUserRequest.Password)} must only contain numbers, letters, and symbols (!@#$%^&*()_+=\\[{{]}};:<>|/?,)");
         }
     }
 }
