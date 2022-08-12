@@ -1,4 +1,4 @@
-﻿using Api.Services.MailService;
+﻿using Api.Providers.MailProvider;
 
 namespace Api.Test.Unit.Services
 {

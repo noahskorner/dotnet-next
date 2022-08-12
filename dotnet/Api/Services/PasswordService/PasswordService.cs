@@ -5,7 +5,7 @@ namespace Api.Services.PasswordService
 {
     public class PasswordService : IPasswordService
     {
-        string IPasswordService.Hash(string password)
+        public string Hash(string password)
         {
             if (password.Contains(".")) throw new InvalidPasswordException();
 
@@ -17,7 +17,7 @@ namespace Api.Services.PasswordService
             return $"{hashedPassword}.{base64Salt}";
         }
 
-        bool IPasswordService.Verify(string password, string hashedPassword)
+        public bool Verify(string password, string hashedPassword)
         {
             try
             {

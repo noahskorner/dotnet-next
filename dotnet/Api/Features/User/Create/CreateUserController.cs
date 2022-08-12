@@ -1,4 +1,5 @@
 ﻿using Api.Domain.User;
+using Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +24,7 @@ namespace Api.Features.User.Create
         public async Task<IActionResult> Create(CreateUserRequest request)
         {
             var result = await _mediator.Send(request.ToCommand());
-            return StatusCode(201, result);
+            return StatusCode(201, new Result<UserDto>(result));
         }
     }
 }

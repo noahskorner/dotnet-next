@@ -1,5 +1,5 @@
-using Api;
 using Api.Configuration;
+using Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json");
@@ -22,8 +22,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseCors(corsConfig.PolicyName);
-app.UseAuthorization();
-app.UseUnknownExceptionHandler();
+app.UseExceptionHandler();
 app.UseFluentValidationExceptionHandler();
 app.MapControllers();
 app.Run();

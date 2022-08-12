@@ -1,5 +1,6 @@
 ﻿using Api.Configuration;
 using Api.Data;
+using Api.Extensions;
 using Api.PipelineBehaviors;
 using Api.Providers.MailProvider;
 using Api.Services.JwtService;
@@ -12,7 +13,7 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text.Json;
 
-namespace Api
+namespace Api.Extensions
 {
     public static class IServiceCollectionExtensions
     {
@@ -53,7 +54,7 @@ namespace Api
                 {
                     options.Filters.Add(new ProducesAttribute("application/json"));
                 })
-                .AddJsonOptions(options  =>
+                .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                     options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
