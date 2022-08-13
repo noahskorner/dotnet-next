@@ -4,9 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace Api.Features.User.Create
 {
-    public class CreateUserValidator : AbstractValidator<CreateUserCommand>
+    public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
     {
-        public CreateUserValidator()
+        public CreateUserRequestValidator()
         {
             RuleFor(x => x.Email)
                 .EmailAddress()

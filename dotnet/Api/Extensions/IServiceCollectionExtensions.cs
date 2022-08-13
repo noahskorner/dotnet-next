@@ -1,7 +1,6 @@
 ﻿using Api.Configuration;
 using Api.Data;
 using Api.Extensions;
-using Api.PipelineBehaviors;
 using Api.Providers.MailProvider;
 using Api.Services.JwtService;
 using Api.Services.PasswordService;
@@ -75,7 +74,6 @@ namespace Api.Extensions
                 options.IncludeXmlComments(filePath);
             });
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             services.AddSingleton<IPasswordService, PasswordService>();
             services.AddSingleton<IMailProvider, SystemMailProvider>();

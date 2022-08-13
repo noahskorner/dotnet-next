@@ -1,4 +1,7 @@
-﻿namespace Api.Features.User.Create
+﻿using Api.Domain.User;
+using MediatR;
+
+namespace Api.Features.User.Create
 {
     public class CreateUserRequest
     {
