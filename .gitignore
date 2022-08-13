@@ -32,5 +32,4 @@ msbuild.wrn
 .vs/
 
 # dotnet
-dotnet/Api/appsettings.Development.json
-dotnet/Api/appsettings.json
+*appsettings*

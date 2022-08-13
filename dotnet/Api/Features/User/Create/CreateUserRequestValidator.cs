@@ -43,10 +43,10 @@ namespace Api.Features.User.Create
             RuleFor(x => x.Password)
                 .Must(password =>
                 {
-                    var validCharacters = new Regex(@"\A[!@#$%^&*()_+=\[{\]};:<>|/?,A-Za-z0-9]\Z");
-                    var isMatch = validCharacters.IsMatch(password);
+                    var validCharacters = new Regex(@"[!@#$%^&*()_+=\[{\]};:<>|/?,A-Za-z0-9]");
+                    var invalidCharacters = validCharacters.Replace(password, "");
 
-                    return validCharacters.IsMatch(password);
+                    return !invalidCharacters.Any();
                 })
                 .WithMessage($"{nameof(CreateUserRequest.Password)} must only contain numbers, letters, and symbols (!@#$%^&*()_+=\\[{{]}};:<>|/?,)");
         }

@@ -2,6 +2,6 @@
 {
     public static class Errors
     {
-        public const string UNKNOWN = "An unkown issue has occurred. Please try again.";
+        public static readonly string UNKNOWN = "An unkown issue has occurred. Please try again.";
     }
 }

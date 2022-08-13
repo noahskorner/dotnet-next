@@ -32,7 +32,7 @@ namespace Api.Features.User.Create
             await _validator.ValidateAsyncOrThrow(request);
 
             var result = await _mediator.Send(request.ToCommand());
-            return StatusCode(201, new Result<UserDto>(result));
+            return Created("", new Result<UserDto>(result));
         }
     }
 }

@@ -16,36 +16,60 @@ namespace Api.Extensions
 {
     public static class IServiceCollectionExtensions
     {
-        public static void AddConfiguration(this IServiceCollection services, ConfigurationManager configuration)
+        public static IServiceCollection AddConfiguration(this IServiceCollection services, ConfigurationManager configuration)
         {
             services.AddSingleton((sp) => configuration.GetSection(CorsConfiguration.Cors).Get<CorsConfiguration>());
             services.AddSingleton((sp) => configuration.GetSection(SqlServerConfiguration.SqlServer).Get<SqlServerConfiguration>());
             services.AddSingleton((sp) => configuration.GetSection(SmtpConfiguration.Smtp).Get<SmtpConfiguration>());
             services.AddSingleton((sp) => configuration.GetSection(JwtConfiguration.Jwt).Get<JwtConfiguration>());
             services.AddSingleton((sp) => configuration.GetSection(FrontendConfiguration.Frontend).Get<FrontendConfiguration>());
+
+            return services;
         }
 
-        public static void AddCors(this IServiceCollection services, CorsConfiguration config)
+        public static IServiceCollection AddCors(this IServiceCollection services, ConfigurationManager configuration)
         {
+            var corsConfig = configuration.GetSection(CorsConfiguration.Cors).Get<CorsConfiguration>();
+
             services.AddCors(options =>
             {
-                options.AddPolicy(name: config.PolicyName, policy =>
+                options.AddPolicy(name: corsConfig.PolicyName, policy =>
                 {
-                    policy.WithOrigins(config.AllowedOrigins)
-                    .AllowAnyMethod();
+                    policy.WithOrigins(corsConfig.AllowedOrigins)
+                          .WithMethods(corsConfig.AllowedMethods);
                 });
             });
+
+            return services;
         }
 
-        public static void AddSqlServer(this IServiceCollection services, SqlServerConfiguration config)
+        public static IServiceCollection AddSqlServer(this IServiceCollection services, ConfigurationManager configuration)
         {
-            services.AddDbContextPool<ApiContext>(options => options
-                    .UseSqlServer(config.ConnectionString, x => x.EnableRetryOnFailure())
-                    .EnableSensitiveDataLogging(config.EnableSensitiveDataLogging)
-                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking), config.PoolSize);
+            var sqlConfig = configuration.GetSection(SqlServerConfiguration.SqlServer).Get<SqlServerConfiguration>();
+
+            services
+                .AddDbContextPool<ApiContext>(options => options
+                    .UseSqlServer(sqlConfig.ConnectionString, x => x.EnableRetryOnFailure())
+                    .EnableSensitiveDataLogging(sqlConfig.EnableSensitiveDataLogging)
+                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking), sqlConfig.PoolSize);
+
+            return services;
         }
 
-        public static void AddServices(this IServiceCollection services)
+        public static IServiceCollection AddInMemoryDatabase(this IServiceCollection services, ConfigurationManager configuration)
+        {
+            var sqlConfig = configuration.GetSection(SqlServerConfiguration.SqlServer).Get<SqlServerConfiguration>();
+
+            services
+                .AddDbContextPool<ApiContext>(options => options
+                    .UseInMemoryDatabase("ApiTest")
+                    .EnableSensitiveDataLogging(sqlConfig.EnableSensitiveDataLogging)
+                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking), sqlConfig.PoolSize);
+
+            return services;
+        }
+
+        public static IServiceCollection AddMiddleware(this IServiceCollection services)
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services
@@ -75,9 +99,16 @@ namespace Api.Extensions
             });
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
+            return services;
+        }
+
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
             services.AddSingleton<IPasswordService, PasswordService>();
             services.AddSingleton<IMailProvider, SystemMailProvider>();
             services.AddSingleton<IJwtService, JwtService>();
+
+            return services;
         }
     }
 }

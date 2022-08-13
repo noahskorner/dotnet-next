@@ -1,9 +1,11 @@
 ﻿using Api.Constants;
+using Api.Data;
 using Api.Enumerations;
 using Api.Extensions;
 using Api.Models;
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -27,9 +29,9 @@ namespace Api.Extensions
                 x.Run(async context =>
                 {
                     var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    #pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                     var exception = errorFeature.Error;
-                    #pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
                     if (exception is ValidationException validationException)
                     {
@@ -58,9 +60,9 @@ namespace Api.Extensions
                 x.Run(async context =>
                 {
                     var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    #pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                     var exception = errorFeature.Error;
-                    #pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
                     var errors = new List<Error> { new Error(ErrorType.Exception, Errors.UNKNOWN, key: nameof(Errors.UNKNOWN)) };
                     var result = new Result<object>(errors: errors);
@@ -72,6 +74,18 @@ namespace Api.Extensions
                     await context.Response.WriteAsync(resultJson, Encoding.UTF8);
                 });
             });
+        }
+
+        public static void RunMigrations(this WebApplication app)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApiContext>();
+                if (!context.Database.IsInMemory())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }

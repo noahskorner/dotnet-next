@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Api.Test
+﻿namespace Api.Test
 {
     [SetUpFixture]
     public class GlobalFixture
@@ -12,7 +6,7 @@ namespace Api.Test
         [OneTimeSetUp]
         public void Setup()
         {
-
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
         }
 
         [OneTimeTearDown]
