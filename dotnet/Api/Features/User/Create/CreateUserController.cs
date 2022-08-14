@@ -29,7 +29,8 @@ namespace Api.Features.User.Create
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Create(CreateUserRequest request)
         {
-            await _validator.ValidateAsyncOrThrow(request);
+            var validationResult = await _validator.ValidateAsync(request).ToResult<UserDto>();
+            if (validationResult.Errors.Any()) return BadRequest(validationResult);
 
             var result = await _mediator.Send(request.ToCommand());
             return Created("", new Result<UserDto>(result));

@@ -26,6 +26,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors(corsConfig.PolicyName);
 app.UseExceptionHandler();
-app.UseFluentValidationExceptionHandler();
 app.MapControllers();
 app.Run();

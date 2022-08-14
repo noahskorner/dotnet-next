@@ -17,7 +17,7 @@ namespace Api.Test.Extensions
             var response = await action;
 
             var statusCodeAssertionMessage = $"Expected type to be {typeof(THttpResult).Name} but was {response.GetType()}";
-            Assert.IsInstanceOf<THttpResult>(action, statusCodeAssertionMessage);
+            Assert.IsInstanceOf<THttpResult>(response, statusCodeAssertionMessage);
 
             var result = response as THttpResult;
             var resultAssertionMessage = $"Expected type to be {typeof(Result<T>)} but was {JsonSerializer.Serialize(result.Value)}";

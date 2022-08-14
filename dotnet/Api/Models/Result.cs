@@ -3,7 +3,7 @@
     public class Result<T>
     {
         public T? Data { get; set; }
-        public List<Error> Errors { get; set; }
+        public IEnumerable<Error> Errors { get; set; }
 
         public Result()
         {
@@ -15,7 +15,7 @@
             Data = data;
         }
 
-        public Result(List<Error> errors)
+        public Result(IEnumerable<Error> errors)
         {
             Errors = errors;
         }

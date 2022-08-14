@@ -45,6 +45,16 @@ namespace Api.Test
                 return _cachedServiceCollection;
             }
         }       
+        private IServiceProvider ServiceProvider
+        {
+            get
+            {
+                if (_cachedServiceProvider != null) return _cachedServiceProvider;
+
+                _cachedServiceProvider = ServiceCollection.BuildServiceProvider();
+                return _cachedServiceProvider;
+            }
+        }
 
         protected TController _sut
         {
