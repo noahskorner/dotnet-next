@@ -1,6 +1,6 @@
 using Api.Services.PasswordService;
 
-namespace Api.Test.Unit.Services.PasswordService
+namespace Api.Test.Unit.Services
 {
     public class PasswordServiceShould
     {
