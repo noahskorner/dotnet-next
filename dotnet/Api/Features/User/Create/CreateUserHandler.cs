@@ -32,6 +32,9 @@ namespace Api.Features.User.Create
 
         public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
+            var existingUser = _context.User.SingleOrDefault(x => x.Email == request.Email);
+            if (existingUser != null) throw new UserAlreadyExistsException();
+
             var hashedPassword = _passwordService.Hash(request.Password);
 
             var user = new UserEntity(request.Email, hashedPassword);
@@ -56,4 +59,6 @@ namespace Api.Features.User.Create
             return token;
         }
     }
+
+    public class UserAlreadyExistsException : Exception { }
 }

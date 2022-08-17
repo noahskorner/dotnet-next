@@ -29,11 +29,17 @@ namespace Api.Features.User.Create
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Create(CreateUserRequest request)
         {
-            var validationResult = await _validator.ValidateAsync(request).ToResult<UserDto>();
-            if (validationResult.Errors.Any()) return BadRequest(validationResult);
+            try
+            {
+                await _validator.ValidateAsyncOrThrow(request);
 
-            var result = await _mediator.Send(request.ToCommand());
-            return Created("", new Result<UserDto>(result));
+                var result = await _mediator.Send(request.ToCommand());
+                return Created("", new Result<UserDto>(result));
+            }
+            catch (UserAlreadyExistsException)
+            {
+                return BadRequest(new Result<UserDto>());
+            }
         }
     }
 }

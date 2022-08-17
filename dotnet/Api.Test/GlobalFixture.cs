@@ -4,13 +4,13 @@
     public class GlobalFixture
     {
         [OneTimeSetUp]
-        public void Setup()
+        public void GlobalOneTimeSetup()
         {
             Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
         }
 
         [OneTimeTearDown]
-        public void TearDown()
+        public void GlobalOneTimeTearDown()
         {
 
         }

@@ -1,16 +1,13 @@
 ﻿using Api.Domain.User;
 using Api.Features.User.Create;
 using Api.Test.Extensions;
+using System.Net.Http.Json;
 
-namespace Api.Test.Unit.Features.Users.Create
+namespace Api.Test.Integration.Features.Users.Create
 {
-    public class CreateUserControllerShould : ControllerFixture<CreateUserController>
+    public class CreateUserControllerShould : ControllerFixture
     {
-        [OneTimeSetUp]
-        public void Setup()
-        {
-
-        }
+        private const string BASE_URL = "api/user";
 
         [Test]
         public async Task ReturnBadRequestWhenEmailIsInvalid()
@@ -19,7 +16,7 @@ namespace Api.Test.Unit.Features.Users.Create
             var request = new CreateUserRequest("", "123456aB$");
 
             // Act && Assert
-            await _sut.Create(request).AsBadRequest<UserDto>();
+            await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<UserDto>();
         }
 
         [Test]
@@ -29,7 +26,7 @@ namespace Api.Test.Unit.Features.Users.Create
             var request = new CreateUserRequest("", "123456aB$");
 
             // Act
-            var result = await _sut.Create(request).AsBadRequest<UserDto>();
+            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<UserDto>();
 
             // Assert
             Assert.That(result.Errors.Any(x => x.Field == nameof(CreateUserCommand.Email)), Is.True);
@@ -46,7 +43,7 @@ namespace Api.Test.Unit.Features.Users.Create
             var request = new CreateUserRequest(_faker.Internet.Email(), password);
 
             // Act && Assert
-            await _sut.Create(request).AsBadRequest<UserDto>();
+            await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<UserDto>();
         }
 
         [Test]
@@ -60,7 +57,7 @@ namespace Api.Test.Unit.Features.Users.Create
             var request = new CreateUserRequest(_faker.Internet.Email(), password);
 
             // Act
-            var result = await _sut.Create(request).AsBadRequest<UserDto>();
+            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<UserDto>();
 
             // Assert
             Assert.That(result.Errors.Any(x => x.Field == nameof(CreateUserCommand.Password)), Is.True);
@@ -70,22 +67,39 @@ namespace Api.Test.Unit.Features.Users.Create
         public async Task ReturnBadRequestWhenEmailAlreadyExists()
         {
             // Arrange
-            var request = new CreateUserRequest(_faker.Internet.Email(), "123456aB$");
+            var email = _faker.Internet.Email();
+            await _context.User.AddAsync(new UserEntity(email, "123456aB$"));
+            await _context.SaveChangesAsync();
+
+            var request = new CreateUserRequest(email, "123456aB$");
 
             // Act && Assert
-            await _sut.Create(request).AsBadRequest<UserDto>();
+            await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<UserDto>();
         }
 
         [Test]
         public async Task ReturnCreated()
         {
+            // Arrange
+            var email = _faker.Internet.Email();
+            var request = new CreateUserRequest(email, "123456aB$");
 
+            // Act && Assert
+            await _sut.PostAsJsonAsync(BASE_URL, request).AsCreated<UserDto>();
         }
 
         [Test]
         public async Task ReturnUserId()
         {
+            // Arrange
+            var email = _faker.Internet.Email();
+            var request = new CreateUserRequest(email, "123456aB$");
 
+            // Act
+            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsCreated<UserDto>();
+
+            // Assert
+            Assert.That(result.Data.Id, Is.AtLeast(1));
         }
     }
 }

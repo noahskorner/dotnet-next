@@ -56,19 +56,6 @@ namespace Api.Extensions
             return services;
         }
 
-        public static IServiceCollection AddInMemoryDatabase(this IServiceCollection services, ConfigurationManager configuration)
-        {
-            var sqlConfig = configuration.GetSection(SqlServerConfiguration.SqlServer).Get<SqlServerConfiguration>();
-
-            services
-                .AddDbContextPool<ApiContext>(options => options
-                    .UseInMemoryDatabase("ApiTest")
-                    .EnableSensitiveDataLogging(sqlConfig.EnableSensitiveDataLogging)
-                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking), sqlConfig.PoolSize);
-
-            return services;
-        }
-
         public static IServiceCollection AddMiddleware(this IServiceCollection services)
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());

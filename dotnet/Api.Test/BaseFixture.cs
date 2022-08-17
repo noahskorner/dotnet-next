@@ -4,9 +4,10 @@ namespace Api.Test
 {
     public class BaseFixture
     {
-        protected readonly Faker _faker;
+        protected Faker _faker;
 
-        public BaseFixture()
+        [OneTimeSetUp]
+        public void SetUp()
         {
             _faker = new Faker();
         }
