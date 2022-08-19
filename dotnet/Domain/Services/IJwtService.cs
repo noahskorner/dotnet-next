@@ -4,6 +4,12 @@ using System.Text;
 
 namespace Domain.Services
 {
+    public interface IJwtService
+    {
+        string GenerateToken(string secretKey);
+        bool ValidateToken(string token, string secretKey);
+    }
+
     public class JwtService : IJwtService
     {
         public string GenerateToken(string secretKey)

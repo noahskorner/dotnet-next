@@ -3,6 +3,13 @@ using System.Security.Cryptography;
 
 namespace Domain.Services
 {
+    public interface IPasswordService
+    {
+        string Hash(string password);
+
+        bool Verify(string password, string actualPassword);
+    }
+
     public class PasswordService : IPasswordService
     {
         public string Hash(string password)
@@ -48,4 +55,8 @@ namespace Domain.Services
                 numBytesRequested: 256 / 8));
         }
     }
+
+    public class InvalidHashedPasswordFormatException : Exception { }
+
+    public class InvalidPasswordException : Exception { }
 }
