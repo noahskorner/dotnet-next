@@ -1,6 +1,7 @@
-﻿using Api.Data;
-using Api.Providers.MailProvider;
-using Api.Test.Extensions;
+﻿using Api.Test.Extensions;
+using Data;
+using Data.Extensions;
+using Domain.Providers.MailProvider;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;

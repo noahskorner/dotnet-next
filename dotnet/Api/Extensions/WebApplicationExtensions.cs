@@ -1,8 +1,7 @@
-﻿using Api.Constants;
-using Api.Data;
-using Api.Enumerations;
-using Api.Extensions;
-using Api.Models;
+﻿using Data;
+using Domain.Constants;
+using Domain.Enumerations;
+using Domain.Models;
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -14,67 +13,71 @@ namespace Api.Extensions
 {
     public static class WebApplicationExtensions
     {
-        private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions()
+        public static void BuildApi(this WebApplication app)
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-            PropertyNameCaseInsensitive = true,
-            WriteIndented = true
-        };
+            app.RunMigrations();
+            app.UseHttpsRedirection();
+            app.UseDefaultExceptionHandler();
+            app.MapControllers();
+        }
 
-        public static void UseFluentValidationExceptionHandler(this WebApplication app)
+        public static void UseSwagger(this WebApplication app)
         {
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+        }
+
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        public static void UseDefaultExceptionHandler(this WebApplication app)
+        {
+            var jsonSerializerOptions = new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNameCaseInsensitive = true,
+                WriteIndented = true
+            };
+
             app.UseExceptionHandler(x =>
             {
                 x.Run(async context =>
                 {
                     var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    #pragma warning disable CS8602 // Dereference of a possibly null reference.
                     var exception = errorFeature.Error;
-                    #pragma warning restore CS8602 // Dereference of a possibly null reference.
+
+                    var errors = new List<Error>();
+                    var statusCode = (int)HttpStatusCode.InternalServerError;
 
                     if (exception is ValidationException validationException)
                     {
-                        var errors = validationException.Errors
-                            .Select(error => new Error(
-                                ErrorType.Validation,
-                                error.ErrorMessage,
-                                field: error.PropertyName))
-                            .ToList();
-                        var result = new Result<object>(errors: errors);
-                        var resultJson = JsonSerializer
-                            .Serialize(result, _jsonSerializerOptions);
-                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        context.Response.ContentType = "application/json";
-
-                        await context.Response.WriteAsync(resultJson, Encoding.UTF8);
+                        errors = validationException.Errors
+                           .Select(error => new Error(
+                               ErrorType.Validation,
+                               error.ErrorMessage,
+                               field: error.PropertyName))
+                           .ToList();
+                        statusCode = (int)HttpStatusCode.BadRequest;
                     }
-                });
-            });
-        }
+                    else
+                    {
+                        errors.Add(new Error(ErrorType.Exception, Errors.UNKNOWN, key: nameof(Errors.UNKNOWN)));
+                    }
 
-        public static void UseExceptionHandler(this WebApplication app)
-        {
-            app.UseExceptionHandler(x =>
-            {
-                x.Run(async context =>
-                {
-                    var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                    var exception = errorFeature.Error;
-                    #pragma warning restore CS8602 // Dereference of a possibly null reference.
-
-                    var errors = new List<Error> { new Error(ErrorType.Exception, Errors.UNKNOWN, key: nameof(Errors.UNKNOWN)) };
                     var result = new Result<object>(errors: errors);
                     var resultJson = JsonSerializer
-                        .Serialize(result, _jsonSerializerOptions);
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        .Serialize(result, jsonSerializerOptions);
                     context.Response.ContentType = "application/json";
+                    context.Response.StatusCode = statusCode;
+
 
                     await context.Response.WriteAsync(resultJson, Encoding.UTF8);
                 });
             });
         }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
         public static void RunMigrations(this WebApplication app)
         {

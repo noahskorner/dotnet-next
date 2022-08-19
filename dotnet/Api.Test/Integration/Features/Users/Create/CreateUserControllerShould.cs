@@ -1,6 +1,8 @@
-﻿using Api.Domain.User;
-using Api.Features.User.Create;
+﻿using Api.Controllers.Api.User.Create;
 using Api.Test.Extensions;
+using Data.Entities.User;
+using Domain.Features.User;
+using Domain.Features.User.Create;
 using System.Net.Http.Json;
 
 namespace Api.Test.Integration.Features.Users.Create
@@ -68,7 +70,7 @@ namespace Api.Test.Integration.Features.Users.Create
         {
             // Arrange
             var email = _faker.Internet.Email();
-            await _context.User.AddAsync(new UserEntity(email, "123456aB$"));
+            await _context.User.AddAsync(new UserEntity(email, "123456aB$", ""));
             await _context.SaveChangesAsync();
 
             var request = new CreateUserRequest(email, "123456aB$");

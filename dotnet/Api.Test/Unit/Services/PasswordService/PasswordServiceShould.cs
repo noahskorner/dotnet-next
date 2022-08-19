@@ -1,4 +1,4 @@
-using Api.Services.PasswordService;
+using Domain.Services;
 
 namespace Api.Test.Unit.Services
 {
