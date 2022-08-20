@@ -1,6 +1,6 @@
-using Services.Features.User;
+using Services.Features.Users;
 
-namespace Test.Unit.Features.User
+namespace Test.Unit.Features.Users
 {
     public class PasswordServiceShould
     {

@@ -2,9 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Data.Configuration;
-using Data.Entities.User;
-using MediatR;
-using Data.PipelineBehaviors;
+using Data.Entities.Users;
 
 namespace Data.Extensions
 {
@@ -13,7 +11,6 @@ namespace Data.Extensions
         public static IServiceCollection RegisterDatabase(this IServiceCollection services, ConfigurationManager configuration)
         {
             services.AddSqlServer(configuration);
-            services.AddPipelineBehaviors();
             services.AddServices();
 
             return services;
@@ -43,15 +40,9 @@ namespace Data.Extensions
             return services;
         }
 
-        public static IServiceCollection AddPipelineBehaviors(this IServiceCollection services)
-        {
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
-
-            return services;
-        }
-
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<ICreateUser, CreateUser>();
             services.AddScoped<IGetUserByEmail, GetUserByEmail>();
 

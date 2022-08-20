@@ -8,7 +8,7 @@ using Services.PipelineBehaviors;
 using Services.Providers.MailProvider;
 using Services.Configuration;
 using Services.Services;
-using Services.Features.User;
+using Services.Features.Users;
 
 namespace Services.Extensions
 {
@@ -18,7 +18,6 @@ namespace Services.Extensions
         {
             services.RegisterDatabase(configuration);
             services.AddConfiguration(configuration);
-            services.AddMiddleware();
             services.AddProviders();
             services.AddServices();
             services.AddPipelineBehaviors();
@@ -35,15 +34,6 @@ namespace Services.Extensions
             return services;
         }
 
-        public static IServiceCollection AddMiddleware(this IServiceCollection services)
-        {
-            services.AddMediatR(Assembly.GetExecutingAssembly());
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-            return services;
-        }
-
         public static IServiceCollection AddProviders(this IServiceCollection services)
         {
             services.AddSingleton<IMailProvider, SystemMailProvider>();
@@ -53,6 +43,9 @@ namespace Services.Extensions
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSingleton<IJwtService, JwtService>();
             services.AddSingleton<IPasswordService, PasswordService>();
 

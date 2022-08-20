@@ -1,10 +1,10 @@
 ﻿using Api.Models;
-using Services.Features.User;
-using Services.Features.User.Create;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Services.Features.Users;
+using Services.Features.Users.Create;
 
-namespace Api.Controllers.Api.User.Create
+namespace Api.Controllers.Api.Users.Create
 {
     [Route("api/user")]
     [ApiController]

@@ -1,4 +1,4 @@
-﻿namespace Services.Features.User
+﻿namespace Services.Features.Users
 {
     public class UserDto
     {

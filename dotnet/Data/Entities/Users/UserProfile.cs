@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using Data.Entities.User;
+using Domain.Models;
 
-namespace Services.Features.User
+namespace Data.Entities.Users
 {
     public class UserProfile : Profile
     {
         public UserProfile()
         {
-            CreateMap<UserDto, UserEntity>().ReverseMap();
+            CreateMap<UserEntity, User>();
         }
     }
 }

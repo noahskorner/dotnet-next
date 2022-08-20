@@ -1,6 +1,6 @@
-﻿using Services.Features.User.Create;
+﻿using Services.Features.Users.Create;
 
-namespace Api.Controllers.Api.User.Create
+namespace Api.Controllers.Api.Users.Create
 {
     public class CreateUserRequest
     {

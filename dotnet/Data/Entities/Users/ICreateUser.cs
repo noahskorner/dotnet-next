@@ -1,20 +1,27 @@
-﻿namespace Data.Entities.User
+﻿using AutoMapper;
+using Domain.Models;
+
+namespace Data.Entities.Users
 {
     public interface ICreateUser
     {
-        Task<UserEntity> Execute(string email, string hashedPassword, string emailVerificationToken);
+        Task<User> Execute(string email, string hashedPassword, string emailVerificationToken);
     }
 
     public class CreateUser : ICreateUser
     {
         private readonly ApiContext _context;
+        private readonly IMapper _mapper;
 
-        public CreateUser(ApiContext context)
+        public CreateUser(
+            ApiContext context,
+            IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<UserEntity> Execute(string email, string hashedPassword, string emailVerificationToken)
+        public async Task<User> Execute(string email, string hashedPassword, string emailVerificationToken)
         {
             var userEntity = new UserEntity()
             {
@@ -27,7 +34,7 @@
             await _context.User.AddAsync(userEntity);
             await _context.SaveChangesAsync();
 
-            return userEntity;
+            return _mapper.Map<User>(userEntity);
         }
     }
 

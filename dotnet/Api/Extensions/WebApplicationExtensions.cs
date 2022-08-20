@@ -2,13 +2,13 @@
 using Data;
 using Services.Constants;
 using Services.Enumerations;
-using Services.Features.User.Create;
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using Services.Features.Users.Create;
 
 namespace Api.Extensions
 {

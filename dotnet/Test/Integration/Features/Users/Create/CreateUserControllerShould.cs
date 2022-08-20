@@ -1,12 +1,12 @@
-﻿using Api.Controllers.Api.User.Create;
-using Data.Entities.User;
+﻿using Api.Controllers.Api.Users.Create;
+using Data.Entities.Users;
 using Services.Constants;
-using Services.Features.User;
-using Services.Features.User.Create;
+using Services.Features.Users;
+using Services.Features.Users.Create;
 using System.Net.Http.Json;
 using Test.Extensions;
 
-namespace Test.Integration.Features.User.Create
+namespace Test.Integration.Features.Users.Create
 {
     public class CreateUserControllerShould : ControllerFixture
     {
@@ -71,7 +71,8 @@ namespace Test.Integration.Features.User.Create
         {
             // Arrange
             var email = _faker.Internet.Email();
-            var existingUser = new UserEntity() { 
+            var existingUser = new UserEntity()
+            {
                 Email = email,
                 Password = "123456aB$"
             };

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Services.Features.User.Create
+namespace Services.Features.Users.Create
 {
     public class CreateUserCommand : IRequest<UserDto>
     {

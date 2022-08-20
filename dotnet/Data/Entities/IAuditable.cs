@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace Data.Entities
+﻿namespace Data.Entities
 {
     public interface IAuditable
     {
