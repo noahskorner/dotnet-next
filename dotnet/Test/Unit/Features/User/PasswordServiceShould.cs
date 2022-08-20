@@ -1,6 +1,6 @@
-using Domain.Services;
+using Domain.Features.User;
 
-namespace Api.Test.Unit.Services
+namespace Test.Unit.Features.User
 {
     public class PasswordServiceShould
     {

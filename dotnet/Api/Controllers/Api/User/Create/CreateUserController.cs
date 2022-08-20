@@ -26,13 +26,13 @@ namespace Api.Controllers.Api.User.Create
         {
             try
             {
-                var createUserRequest = ToCommand(request); // TODO: Automapper
+                var createUserRequest = ToCommand(request);
                 var result = await _mediator.Send(createUserRequest);
                 return Created("", new Result<UserDto>(result));
             }
             catch (UserAlreadyExistsException)
             {
-                return BadRequest(new Result<UserDto>());
+                return BadRequest(new Result<UserDto>()); // TODO: Centralized exception handlers
             }
         }
 

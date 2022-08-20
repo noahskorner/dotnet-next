@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Data.Configuration;
 using Data.Entities.User;
+using MediatR;
+using Data.PipelineBehaviors;
 
 namespace Data.Extensions
 {
@@ -11,6 +13,7 @@ namespace Data.Extensions
         public static IServiceCollection RegisterDatabase(this IServiceCollection services, ConfigurationManager configuration)
         {
             services.AddSqlServer(configuration);
+            services.AddPipelineBehaviors();
             services.AddServices();
 
             return services;
@@ -23,9 +26,8 @@ namespace Data.Extensions
 
             services
                 .AddDbContextPool<ApiContext>(options => options
-                    .UseSqlServer(sqlConfig.ConnectionString, x => x.EnableRetryOnFailure())
-                    .EnableSensitiveDataLogging(sqlConfig.EnableSensitiveDataLogging)
-                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking), sqlConfig.PoolSize);
+                    .UseSqlServer(sqlConfig.ConnectionString)
+                    .EnableSensitiveDataLogging(sqlConfig.EnableSensitiveDataLogging), sqlConfig.PoolSize);
 
             return services;
         }
@@ -37,6 +39,13 @@ namespace Data.Extensions
                     .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                     .EnableSensitiveDataLogging(true)
                     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking), 256);
+
+            return services;
+        }
+
+        public static IServiceCollection AddPipelineBehaviors(this IServiceCollection services)
+        {
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
 
             return services;
         }

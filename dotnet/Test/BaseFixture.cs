@@ -1,6 +1,6 @@
 ﻿using Bogus;
 
-namespace Api.Test
+namespace Test
 {
     public class BaseFixture
     {

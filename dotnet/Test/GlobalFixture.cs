@@ -1,4 +1,4 @@
-﻿namespace Api.Test
+﻿namespace Test
 {
     [SetUpFixture]
     public class GlobalFixture

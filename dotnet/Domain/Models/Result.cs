@@ -3,12 +3,9 @@
     public class Result<T>
     {
         public T Data { get; set; }
-        public IEnumerable<Error> Errors { get; set; }
+        public IEnumerable<Error> Errors { get; set; } = Enumerable.Empty<Error>();
 
-        public Result()
-        {
-            Errors = new List<Error>();
-        }
+        public Result() { }
 
         public Result(T data)
         {

@@ -1,6 +1,6 @@
 ﻿using Domain.Services;
 
-namespace Api.Test.Unit.Services
+namespace Test.Unit.Services
 {
     public class JwtServiceShould
     {

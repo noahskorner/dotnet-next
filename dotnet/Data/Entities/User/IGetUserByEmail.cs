@@ -18,7 +18,7 @@ namespace Data.Entities.User
 
         public Task<UserEntity?> Execute(string email)
         {
-            return _context.User.SingleOrDefaultAsync(x => x.Email == email);
+            return _context.User.AsNoTracking().SingleOrDefaultAsync(x => x.Email == email);
         }
     }
 

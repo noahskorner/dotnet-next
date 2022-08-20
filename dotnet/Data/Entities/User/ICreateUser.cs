@@ -2,7 +2,7 @@
 {
     public interface ICreateUser
     {
-        Task<UserEntity> Execute(UserEntity userEntity);
+        Task<UserEntity> Execute(string email, string hashedPassword, string emailVerificationToken);
     }
 
     public class CreateUser : ICreateUser
@@ -14,13 +14,20 @@
             _context = context;
         }
 
-        public async Task<UserEntity> Execute(UserEntity user)
+        public async Task<UserEntity> Execute(string email, string hashedPassword, string emailVerificationToken)
         {
+            var userEntity = new UserEntity()
+            {
+                Email = email,
+                Password = hashedPassword,
+                EmailVerificationToken = emailVerificationToken,
+                IsEmailVerified = false
+            };
 
-            await _context.User.AddAsync(user);
+            await _context.User.AddAsync(userEntity);
             await _context.SaveChangesAsync();
 
-            return user;
+            return userEntity;
         }
     }
 

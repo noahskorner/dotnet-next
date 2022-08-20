@@ -5,9 +5,10 @@ using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Domain.Configuration;
 using Domain.Providers.MailProvider;
-using Domain.Services;
 using Domain.PipelineBehaviors;
 using Data.Extensions;
+using Domain.Services;
+using Domain.Features.User;
 
 namespace Domain.Extensions
 {
@@ -38,6 +39,7 @@ namespace Domain.Extensions
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             return services;
         }
@@ -51,8 +53,8 @@ namespace Domain.Extensions
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddSingleton<IPasswordService, PasswordService>();
             services.AddSingleton<IJwtService, JwtService>();
+            services.AddSingleton<IPasswordService, PasswordService>();
 
             return services;
         }
