@@ -57,6 +57,7 @@ namespace Api.Extensions
                     {
                         Title = "Dotnet Next Api",
                         Version = "v1",
+
                     });
 
                 var filePath = Path.Combine(AppContext.BaseDirectory, "Api.xml");

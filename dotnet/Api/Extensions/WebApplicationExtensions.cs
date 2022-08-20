@@ -16,12 +16,13 @@ namespace Api.Extensions
         public static void BuildApi(this WebApplication app)
         {
             app.RunMigrations();
+            app.UseSwaggerPage();
             app.UseHttpsRedirection();
             app.UseDefaultExceptionHandler();
             app.MapControllers();
         }
 
-        public static void UseSwagger(this WebApplication app)
+        public static void UseSwaggerPage(this WebApplication app)
         {
             if (app.Environment.IsDevelopment())
             {
