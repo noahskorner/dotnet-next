@@ -33,3 +33,39 @@ msbuild.wrn
 
 # dotnet
 *appsettings*
+
+# next
+# dependencies
+next/node_modules
+next/.pnp
+*.pnp.js
+
+# testing
+next/coverage
+
+# next.js
+next/.next/
+next/out/
+
+# production
+next/build
+
+# misc
+.DS_Store
+next/*.pem
+
+# debug
+next/npm-debug.log*
+next/yarn-debug.log*
+next/yarn-error.log*
+next/.pnpm-debug.log*
+
+# local env files
+*.env*.local
+
+# vercel
+next/.vercel
+
+# typescript
+*.tsbuildinfo
+next/next-env.d.ts
