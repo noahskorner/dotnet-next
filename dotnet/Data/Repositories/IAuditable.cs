@@ -1,4 +1,4 @@
-﻿namespace Data.Entities
+﻿namespace Data.Repositories
 {
     public interface IAuditable
     {

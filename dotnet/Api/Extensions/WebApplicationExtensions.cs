@@ -1,7 +1,5 @@
 ﻿using Api.Models;
 using Data;
-using Services.Constants;
-using Services.Enumerations;
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +8,8 @@ using System.Text;
 using System.Text.Json;
 using Services.Features.Users.Create;
 using Services.Features.Users.VerifyEmail;
+using Domain.Constants;
+using Api.Enumerations;
 
 namespace Api.Extensions
 {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Data.Entities.Users
+namespace Data.Repositories.Users
 {
     public class UserMap : IEntityTypeConfiguration<UserEntity>
     {

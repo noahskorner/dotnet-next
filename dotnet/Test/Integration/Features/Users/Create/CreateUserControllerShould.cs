@@ -1,6 +1,6 @@
 ﻿using Api.Controllers.Api.Users.Create;
-using Data.Entities.Users;
-using Services.Constants;
+using Data.Repositories.Users;
+using Domain.Constants;
 using Services.Features.Users;
 using Services.Features.Users.Create;
 using System.Net.Http.Json;

@@ -1,4 +1,4 @@
-﻿using Data.Entities.Users;
+﻿using Data.Repositories.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data

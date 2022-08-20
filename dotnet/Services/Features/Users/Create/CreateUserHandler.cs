@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Data.Entities.Users;
+using Data.Repositories.Users;
 using MediatR;
 using Services.Configuration;
 using Services.Services;

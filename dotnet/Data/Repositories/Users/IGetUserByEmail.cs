@@ -2,7 +2,7 @@
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.Entities.Users
+namespace Data.Repositories.Users
 {
     public interface IGetUserByEmail
     {

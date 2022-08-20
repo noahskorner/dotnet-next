@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Models;
 
-namespace Data.Entities.Users
+namespace Data.Repositories.Users
 {
     public class UserProfile : Profile
     {
