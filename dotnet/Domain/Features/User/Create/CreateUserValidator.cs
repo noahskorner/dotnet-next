@@ -10,7 +10,7 @@ namespace Domain.Features.User.Create
         {
             RuleFor(x => x.Email)
                 .EmailAddress()
-                .WithMessage("Must provide a valid ");
+                .WithMessage($"Must provide a valid {nameof(CreateUserCommand.Email)}");
 
             RuleFor(x => x.Password)
                 .MinimumLength(DataConfiguration.MIN_PASSWORD_LENGTH)
