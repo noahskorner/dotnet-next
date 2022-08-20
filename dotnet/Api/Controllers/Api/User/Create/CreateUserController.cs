@@ -1,6 +1,6 @@
 ﻿using Api.Models;
-using Domain.Features.User;
-using Domain.Features.User.Create;
+using Services.Features.User;
+using Services.Features.User.Create;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

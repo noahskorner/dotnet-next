@@ -1,4 +1,4 @@
-﻿using Domain.Enumerations;
+﻿using Services.Enumerations;
 
 namespace Api.Models
 {

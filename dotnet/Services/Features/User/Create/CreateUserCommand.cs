@@ -1,7 +1,6 @@
-﻿using Domain.Features.User;
-using MediatR;
+﻿using MediatR;
 
-namespace Domain.Features.User.Create
+namespace Services.Features.User.Create
 {
     public class CreateUserCommand : IRequest<UserDto>
     {

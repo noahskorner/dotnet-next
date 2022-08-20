@@ -1,8 +1,8 @@
 ﻿using Api.Models;
 using Data;
-using Domain.Constants;
-using Domain.Enumerations;
-using Domain.Features.User.Create;
+using Services.Constants;
+using Services.Enumerations;
+using Services.Features.User.Create;
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;

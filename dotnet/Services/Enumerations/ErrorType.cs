@@ -1,4 +1,4 @@
-﻿namespace Domain.Enumerations
+﻿namespace Services.Enumerations
 {
     public enum ErrorType
     {

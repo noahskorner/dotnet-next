@@ -1,4 +1,4 @@
-using Domain.Features.User;
+using Services.Features.User;
 
 namespace Test.Unit.Features.User
 {

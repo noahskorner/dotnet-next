@@ -1,8 +1,9 @@
-﻿namespace Domain.Extensions
+﻿namespace Services.Extensions
 {
     public static class WebApplicationExtensions
     {
-        public static void BuildDomain(this string app) {
+        public static void BuildServices(this string app)
+        {
             // TODO: Run Migrations
         }
     }

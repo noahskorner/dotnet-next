@@ -1,4 +1,4 @@
-﻿namespace Domain.Configuration
+﻿namespace Services.Configuration
 {
     public class SmtpConfiguration
     {

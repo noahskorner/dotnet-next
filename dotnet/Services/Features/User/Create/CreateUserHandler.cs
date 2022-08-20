@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Data.Entities.User;
-using Domain.Configuration;
-using Domain.Providers.MailProvider;
-using Domain.Services;
 using MediatR;
+using Services.Configuration;
+using Services.Providers.MailProvider;
+using Services.Services;
 
-namespace Domain.Features.User.Create
+namespace Services.Features.User.Create
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
     {

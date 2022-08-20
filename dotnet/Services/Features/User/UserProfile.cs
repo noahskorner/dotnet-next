@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Data.Entities.User;
 
-namespace Domain.Features.User
+namespace Services.Features.User
 {
     public class UserProfile : Profile
     {

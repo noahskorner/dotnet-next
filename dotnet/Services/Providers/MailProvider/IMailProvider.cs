@@ -1,4 +1,4 @@
-﻿namespace Domain.Providers.MailProvider
+﻿namespace Services.Providers.MailProvider
 {
     public interface IMailProvider
     {

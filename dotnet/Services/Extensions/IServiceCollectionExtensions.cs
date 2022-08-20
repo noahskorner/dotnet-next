@@ -3,18 +3,18 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
-using Domain.Configuration;
-using Domain.Providers.MailProvider;
-using Domain.PipelineBehaviors;
 using Data.Extensions;
-using Domain.Services;
-using Domain.Features.User;
+using Services.PipelineBehaviors;
+using Services.Providers.MailProvider;
+using Services.Configuration;
+using Services.Services;
+using Services.Features.User;
 
-namespace Domain.Extensions
+namespace Services.Extensions
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection RegisterDomain(this IServiceCollection services, ConfigurationManager configuration)
+        public static IServiceCollection RegisterServices(this IServiceCollection services, ConfigurationManager configuration)
         {
             services.RegisterDatabase(configuration);
             services.AddConfiguration(configuration);

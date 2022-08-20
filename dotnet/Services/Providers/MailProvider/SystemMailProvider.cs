@@ -1,8 +1,8 @@
-﻿using Domain.Configuration;
+﻿using Services.Configuration;
 using System.Net;
 using System.Net.Mail;
 
-namespace Domain.Providers.MailProvider
+namespace Services.Providers.MailProvider
 {
     public class SystemMailProvider : IMailProvider
     {

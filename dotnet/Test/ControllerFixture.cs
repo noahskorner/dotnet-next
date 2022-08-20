@@ -1,6 +1,6 @@
 ﻿using Data;
 using Data.Extensions;
-using Domain.Providers.MailProvider;
+using Services.Providers.MailProvider;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;

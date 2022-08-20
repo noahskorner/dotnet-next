@@ -1,4 +1,4 @@
-﻿namespace Domain.Constants
+﻿namespace Services.Constants
 {
     public static class Errors
     {

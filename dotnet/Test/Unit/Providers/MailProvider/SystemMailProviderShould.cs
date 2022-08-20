@@ -1,4 +1,4 @@
-﻿using Domain.Providers.MailProvider;
+﻿using Services.Providers.MailProvider;
 
 namespace Test.Unit.Providers.MailProvider
 {

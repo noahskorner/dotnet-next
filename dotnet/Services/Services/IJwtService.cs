@@ -2,7 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
-namespace Domain.Services
+namespace Services.Services
 {
     public interface IJwtService
     {

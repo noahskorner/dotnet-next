@@ -2,7 +2,7 @@
 using FluentValidation;
 using System.Text.RegularExpressions;
 
-namespace Domain.Features.User.Create
+namespace Services.Features.User.Create
 {
     public class CreateUserValidator : AbstractValidator<CreateUserCommand>
     {
