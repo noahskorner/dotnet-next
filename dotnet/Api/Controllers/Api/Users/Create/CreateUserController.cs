@@ -22,7 +22,7 @@ namespace Api.Controllers.Api.Users.Create
         /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
-        public async Task<IActionResult> Create(CreateUserRequest request)
+        public async Task<IActionResult> Post(CreateUserRequest request)
         {
             var command = new CreateUserCommand(request.Email, request.Password);
             var result = await _mediator.Send(command);

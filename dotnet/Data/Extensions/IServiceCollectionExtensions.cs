@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Data.Configuration;
 using Data.Entities.Users;
+using Data.Repositories.Users;
 
 namespace Data.Extensions
 {
@@ -45,6 +46,8 @@ namespace Data.Extensions
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<ICreateUser, CreateUser>();
             services.AddScoped<IGetUserByEmail, GetUserByEmail>();
+            services.AddScoped<IGetUserById, GetUserById>();
+            services.AddScoped<IUpdateIsEmailVerified, UpdateIsEmailVerified>();
 
             return services;
         }

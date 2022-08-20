@@ -9,6 +9,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using Services.Features.Users.Create;
+using Services.Features.Users.VerifyEmail;
 
 namespace Api.Extensions
 {
@@ -55,18 +56,26 @@ namespace Api.Extensions
 
                     switch (exception)
                     {
-                        case ValidationException validationException:
+                        case ValidationException e:
                             statusCode = (int)HttpStatusCode.BadRequest;
-                            errors = validationException.Errors
+                            errors = e.Errors
                                .Select(error => new Error(
                                    ErrorType.Validation,
                                    error.ErrorMessage,
                                    field: error.PropertyName))
                                .ToList();
                             break;
-                        case UserAlreadyExistsException userAlreadyExistsException:
+                        case UserAlreadyExistsException e:
                             statusCode = (int)HttpStatusCode.BadRequest;
                             errors.Add(new Error(ErrorType.Exception, Errors.USER_ALREADY_EXISTS, key: nameof(Errors.USER_ALREADY_EXISTS)));
+                            break;
+                        case UserNotFoundException e:
+                            statusCode = (int)HttpStatusCode.NotFound;
+                            errors.Add(new Error(ErrorType.Exception, Errors.USER_NOT_FOUND, key: nameof(Errors.USER_NOT_FOUND)));
+                            break;
+                        case InvalidEmailVerificationTokenException e:
+                            statusCode = (int)HttpStatusCode.Unauthorized;
+                            errors.Add(new Error(ErrorType.Exception, Errors.INVALID_EMAIL_VERIFICATION_TOKEN, key: nameof(Errors.INVALID_EMAIL_VERIFICATION_TOKEN)));
                             break;
                         default:
                             errors.Add(new Error(ErrorType.Exception, Errors.UNKNOWN, key: nameof(Errors.UNKNOWN)));
