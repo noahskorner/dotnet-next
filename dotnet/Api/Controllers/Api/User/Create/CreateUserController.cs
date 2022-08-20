@@ -1,6 +1,6 @@
-﻿using Domain.Features.User;
+﻿using Api.Models;
+using Domain.Features.User;
 using Domain.Features.User.Create;
-using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,21 +24,9 @@ namespace Api.Controllers.Api.User.Create
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Create(CreateUserRequest request)
         {
-            try
-            {
-                var createUserRequest = ToCommand(request);
-                var result = await _mediator.Send(createUserRequest);
-                return Created("", new Result<UserDto>(result));
-            }
-            catch (UserAlreadyExistsException)
-            {
-                return BadRequest(new Result<UserDto>()); // TODO: Centralized exception handlers
-            }
-        }
-
-        private static CreateUserCommand ToCommand(CreateUserRequest request)
-        {
-            return new CreateUserCommand(request.Email, request.Password);
+            var command = new CreateUserCommand(request.Email, request.Password);
+            var result = await _mediator.Send(command);
+            return Created("", new Result<UserDto>(result));
         }
     }
 }

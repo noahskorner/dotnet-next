@@ -1,4 +1,4 @@
-﻿namespace Domain.Models
+﻿namespace Api.Models
 {
     public class Result<T>
     {

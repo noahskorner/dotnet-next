@@ -1,4 +1,4 @@
-﻿using Domain.Models;
+﻿using Api.Models;
 using System.Net;
 using System.Net.Http.Json;
 

@@ -1,5 +1,6 @@
 ﻿using Api.Controllers.Api.User.Create;
 using Data.Entities.User;
+using Domain.Constants;
 using Domain.Features.User;
 using Domain.Features.User.Create;
 using System.Net.Http.Json;
@@ -62,7 +63,7 @@ namespace Test.Integration.Features.User.Create
             var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<UserDto>();
 
             // Assert
-            Assert.That(result.Errors.Any(x => x.Field == nameof(CreateUserCommand.Password)), Is.True);
+            result.ShouldHaveValidationErrorsFor(nameof(CreateUserCommand.Password));
         }
 
         [Test]
@@ -81,6 +82,28 @@ namespace Test.Integration.Features.User.Create
 
             // Act && Assert
             await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<UserDto>();
+        }
+
+        [Test]
+        public async Task ReturnUserAlreadyExistsError()
+        {
+            // Arrange
+            var email = _faker.Internet.Email();
+            var existingUser = new UserEntity()
+            {
+                Email = email,
+                Password = "123456aB$"
+            };
+            await _context.User.AddAsync(existingUser);
+            await _context.SaveChangesAsync();
+
+            var request = new CreateUserRequest(email, "123456aB$");
+
+            // Act
+            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<UserDto>();
+
+            // Assert
+            result.ShouldHaveErrorsFor(nameof(Errors.USER_ALREADY_EXISTS));
         }
 
         [Test]

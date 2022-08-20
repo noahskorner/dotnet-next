@@ -1,7 +1,8 @@
-﻿using Data;
+﻿using Api.Models;
+using Data;
 using Domain.Constants;
 using Domain.Enumerations;
-using Domain.Models;
+using Domain.Features.User.Create;
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -52,19 +53,24 @@ namespace Api.Extensions
                     var errors = new List<Error>();
                     var statusCode = (int)HttpStatusCode.InternalServerError;
 
-                    if (exception is ValidationException validationException)
+                    switch (exception)
                     {
-                        errors = validationException.Errors
-                           .Select(error => new Error(
-                               ErrorType.Validation,
-                               error.ErrorMessage,
-                               field: error.PropertyName))
-                           .ToList();
-                        statusCode = (int)HttpStatusCode.BadRequest;
-                    }
-                    else
-                    {
-                        errors.Add(new Error(ErrorType.Exception, Errors.UNKNOWN, key: nameof(Errors.UNKNOWN)));
+                        case ValidationException validationException:
+                            statusCode = (int)HttpStatusCode.BadRequest;
+                            errors = validationException.Errors
+                               .Select(error => new Error(
+                                   ErrorType.Validation,
+                                   error.ErrorMessage,
+                                   field: error.PropertyName))
+                               .ToList();
+                            break;
+                        case UserAlreadyExistsException userAlreadyExistsException:
+                            statusCode = (int)HttpStatusCode.BadRequest;
+                            errors.Add(new Error(ErrorType.Exception, Errors.USER_ALREADY_EXISTS, key: nameof(Errors.USER_ALREADY_EXISTS)));
+                            break;
+                        default:
+                            errors.Add(new Error(ErrorType.Exception, Errors.UNKNOWN, key: nameof(Errors.UNKNOWN)));
+                            break;
                     }
 
                     var result = new Result<object>(errors: errors);

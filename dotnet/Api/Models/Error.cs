@@ -1,6 +1,6 @@
 ﻿using Domain.Enumerations;
 
-namespace Domain.Models
+namespace Api.Models
 {
     public class Error
     {
