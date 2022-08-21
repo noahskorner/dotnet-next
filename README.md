@@ -10,7 +10,7 @@
 ### Development Setup
 
 ## Todo
-- [ ] Add Localization
+- [x] Add Localization
 - [ ] Add Logging Service
 - [ ] Create<> Factories
 - [ ] Add Rate Limiting

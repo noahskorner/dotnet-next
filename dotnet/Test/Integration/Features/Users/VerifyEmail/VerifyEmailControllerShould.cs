@@ -45,6 +45,23 @@ namespace Test.Integration.Features.Users.VerifyEmail
             await _sut.PutAsync(url, null).AsOk<UserDto>();
         }
 
+        [Test]
+        public async Task ReturnEmailWhenTokenIsValid()
+        {
+            // Arrange
+            var email = _faker.Internet.Email();
+            var createUserRequest = new CreateUserRequest(email, "123456aB$");
+            var createUserResult = await _sut.PostAsJsonAsync(BASE_URL, createUserRequest).AsCreated<UserDto>();
+            var userEntity = await _context.User.FindAsync(createUserResult.Data.Id);
+            var url = GetUrl(1, userEntity?.EmailVerificationToken ?? "");
+
+            // Act
+            var result = await _sut.PutAsync(url, null).AsOk<UserDto>();
+
+            // Assert
+            Assert.That(result.Data.Email, Is.EqualTo(email));
+        }
+
         private string GetUrl(long userId, string token)
         {
             return $"{BASE_URL}/{userId}/verify-email/{token}";
