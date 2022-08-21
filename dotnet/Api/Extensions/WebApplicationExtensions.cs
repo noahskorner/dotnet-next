@@ -10,6 +10,9 @@ using Services.Features.Users.Create;
 using Services.Features.Users.VerifyEmail;
 using Domain.Constants;
 using Api.Enumerations;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
+using Api.Localization;
 
 namespace Api.Extensions
 {
@@ -18,6 +21,7 @@ namespace Api.Extensions
         public static void BuildApi(this WebApplication app)
         {
             app.RunMigrations();
+            app.UseLocalization();
             app.UseSwaggerPage();
             app.UseHttpsRedirection();
             app.UseDefaultExceptionHandler();
@@ -33,7 +37,6 @@ namespace Api.Extensions
             }
         }
 
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
         public static void UseDefaultExceptionHandler(this WebApplication app)
         {
             var jsonSerializerOptions = new JsonSerializerOptions()
@@ -49,7 +52,7 @@ namespace Api.Extensions
                 x.Run(async context =>
                 {
                     var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    var exception = errorFeature.Error;
+                    var exception = errorFeature?.Error;
 
                     var errors = new List<Error>();
                     var statusCode = (int)HttpStatusCode.InternalServerError;
@@ -93,7 +96,16 @@ namespace Api.Extensions
                 });
             });
         }
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+
+        public static void UseLocalization(this WebApplication app)
+        {
+            var options = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(new CultureInfo("en-US"))
+            };
+            app.UseRequestLocalization(options);
+            app.UseMiddleware<LocalizationMiddleware>();
+        }
 
         public static void RunMigrations(this WebApplication app)
         {

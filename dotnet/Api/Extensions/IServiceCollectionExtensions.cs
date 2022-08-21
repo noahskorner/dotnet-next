@@ -1,5 +1,7 @@
 ﻿using Api.Configuration;
 using Api.Extensions;
+using Api.Localization;
+using Microsoft.Extensions.Localization;
 using Microsoft.OpenApi.Models;
 using System.Text.Json;
 
@@ -11,7 +13,11 @@ namespace Api.Extensions
         {
             services.AddCors(configuration);
             services.AddMiddleware();
+            services.AddLocalization();
+            services.AddSingleton<LocalizationMiddleware>();
+            services.AddDistributedMemoryCache();
             services.AddSwagger();
+            services.AddServices();
 
             return services;
         }
@@ -63,6 +69,13 @@ namespace Api.Extensions
                 var filePath = Path.Combine(AppContext.BaseDirectory, "Api.xml");
                 options.IncludeXmlComments(filePath);
             });
+
+            return services;
+        }
+
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            services.AddSingleton<IStringLocalizer, JsonStringLocalizer>();
 
             return services;
         }
