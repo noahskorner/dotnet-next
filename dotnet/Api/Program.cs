@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add configuration files
 builder.Configuration.AddJsonFile("appsettings.json");
-builder.Configuration.AddJsonFile($"appsettings.{environment}.json");
+builder.Configuration.AddJsonFile($"appsettings.{environment}.json", true);
 
 // Add services to the container.
 builder.Services.RegisterServices(builder.Configuration);

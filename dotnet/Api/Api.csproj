@@ -44,4 +44,8 @@
     <InternalsVisibleTo Include="Test" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="dotnet swagger tofile --output swagger.json bin/debug/net6.0/Api.dll v1" />
+  </Target>
+
 </Project>

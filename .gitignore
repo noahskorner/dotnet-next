@@ -69,3 +69,7 @@ next/.vercel
 # typescript
 *.tsbuildinfo
 next/next-env.d.ts
+
+# cli
+/node_modules
+dotnet/Api/swagger.json
