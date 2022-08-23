@@ -10,12 +10,14 @@
 ### Development Setup
 
 ## Todo
-- [x] Add Localization Service
+= [ ] Fix Test project DB / perf
 - [ ] Add Localization to exceptions
 - [ ] Add Logging Service
-- [ ] Create<> Factories
+- [ ] Create<> Fixtures
 - [ ] Add Rate Limiting
+- [ ] Add Api Caching
+- [ ] Add Prettier / ESLint
+- [ ] Add Jest / Cypress
+- [x] Add Localization Service
 - [x] Create NextJS project
 - [x] Add TailwindCSS
-- [ ] Add prettier, eslint
-- [ ] Add Jest / Cypress
