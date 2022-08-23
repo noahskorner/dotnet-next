@@ -37,7 +37,7 @@ namespace Services.Features.Users.Create
         public async Task<UserDto> Handle(CreateUserCommand command, CancellationToken cancellationToken)
         {
             var existingUser = await _getUserByEmail.Execute(command.Email);
-            if (existingUser != null) throw new UserAlreadyExistsException();
+            if (existingUser != null) throw new CreateUserAlreadyExistsException();
 
             var hashedPassword = _passwordService.Hash(command.Password);
             var emailVerificationToken = _jwtService.GenerateToken(_jwtConfig.EmailVerificationSecret);
@@ -49,5 +49,5 @@ namespace Services.Features.Users.Create
         }
     }
 
-    public class UserAlreadyExistsException : Exception { }
+    public class CreateUserAlreadyExistsException : Exception { }
 }

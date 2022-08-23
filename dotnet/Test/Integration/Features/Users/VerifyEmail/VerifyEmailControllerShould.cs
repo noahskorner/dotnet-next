@@ -7,7 +7,7 @@ namespace Test.Integration.Features.Users.VerifyEmail
 {
     public class VerifyEmailControllerShould : ControllerFixture
     {
-        private const string BASE_URL = "api/user";
+        private const string BASE_URL = "v1/user";
 
         [Test]
         public async Task ReturnNotFoundWhenUserDoesNotExist()

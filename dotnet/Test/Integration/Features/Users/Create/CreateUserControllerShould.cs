@@ -10,7 +10,7 @@ namespace Test.Integration.Features.Users.Create
 {
     public class CreateUserControllerShould : ControllerFixture
     {
-        private const string BASE_URL = "api/user";
+        private const string BASE_URL = "v1/user";
 
         [Test]
         public async Task ReturnBadRequestWhenEmailIsInvalid()
@@ -71,13 +71,8 @@ namespace Test.Integration.Features.Users.Create
         {
             // Arrange
             var email = _faker.Internet.Email();
-            var existingUser = new UserEntity()
-            {
-                Email = email,
-                Password = "123456aB$"
-            };
-            await _context.User.AddAsync(existingUser);
-            await _context.SaveChangesAsync();
+            var existingUserRequest = new CreateUserRequest(email, "123456aB$");
+            await _sut.PostAsJsonAsync(BASE_URL, existingUserRequest);
 
             var request = new CreateUserRequest(email, "123456aB$");
 
@@ -90,13 +85,8 @@ namespace Test.Integration.Features.Users.Create
         {
             // Arrange
             var email = _faker.Internet.Email();
-            var existingUser = new UserEntity()
-            {
-                Email = email,
-                Password = "123456aB$"
-            };
-            await _context.User.AddAsync(existingUser);
-            await _context.SaveChangesAsync();
+            var existingUserRequest = new CreateUserRequest(email, "123456aB$");
+            await _sut.PostAsJsonAsync(BASE_URL, existingUserRequest);
 
             var request = new CreateUserRequest(email, "123456aB$");
 
@@ -104,7 +94,7 @@ namespace Test.Integration.Features.Users.Create
             var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<UserDto>();
 
             // Assert
-            result.ShouldHaveErrorsFor(nameof(Errors.USER_ALREADY_EXISTS));
+            result.ShouldHaveErrorsFor(nameof(Errors.CREATE_USER_AREADY_EXISTS));
         }
 
         [Test]

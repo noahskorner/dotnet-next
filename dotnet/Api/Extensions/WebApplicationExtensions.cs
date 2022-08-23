@@ -13,6 +13,7 @@ using Api.Enumerations;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Api.Localization;
+using Services.Features.Auth.Login;
 
 namespace Api.Extensions
 {
@@ -59,26 +60,31 @@ namespace Api.Extensions
 
                     switch (exception)
                     {
-                        case ValidationException e:
+                        case ValidationException validationException:
                             statusCode = (int)HttpStatusCode.BadRequest;
-                            errors = e.Errors
+                            errors = validationException.Errors
                                .Select(error => new Error(
                                    ErrorType.Validation,
                                    error.ErrorMessage,
                                    field: error.PropertyName))
                                .ToList();
                             break;
-                        case UserAlreadyExistsException e:
+                        case CreateUserAlreadyExistsException createUserAlreadyExistsException:
                             statusCode = (int)HttpStatusCode.BadRequest;
-                            errors.Add(new Error(ErrorType.Exception, Errors.USER_ALREADY_EXISTS, key: nameof(Errors.USER_ALREADY_EXISTS)));
+                            errors.Add(new Error(ErrorType.Exception, Errors.CREATE_USER_AREADY_EXISTS, key: nameof(Errors.CREATE_USER_AREADY_EXISTS)));
                             break;
-                        case UserNotFoundException e:
+                        case VerifyEmailUserNotFoundException verifyEmailUserNotFoundException:
                             statusCode = (int)HttpStatusCode.NotFound;
-                            errors.Add(new Error(ErrorType.Exception, Errors.USER_NOT_FOUND, key: nameof(Errors.USER_NOT_FOUND)));
+                            errors.Add(new Error(ErrorType.Exception, Errors.CREATE_USER_NOT_FOUND, key: nameof(Errors.CREATE_USER_NOT_FOUND)));
                             break;
-                        case InvalidEmailVerificationTokenException e:
+                        case VerifyEmailInvalidTokenException verifyEmailInvalidTokenException:
                             statusCode = (int)HttpStatusCode.Unauthorized;
-                            errors.Add(new Error(ErrorType.Exception, Errors.INVALID_EMAIL_VERIFICATION_TOKEN, key: nameof(Errors.INVALID_EMAIL_VERIFICATION_TOKEN)));
+                            errors.Add(new Error(ErrorType.Exception, Errors.VERIFY_EMAIL_INVALID_TOKEN, key: nameof(Errors.VERIFY_EMAIL_INVALID_TOKEN)));
+                            break;
+                        case LoginUserNotFoundException userNotFoundException:
+                        case LoginInvalidPasswordException invalidPasswordException:
+                            statusCode = (int)HttpStatusCode.Unauthorized;
+                            errors.Add(new Error(ErrorType.Exception, Errors.LOGIN_USER_INVALID_EMAIL_OR_PASSWORD, key: nameof(Errors.LOGIN_USER_INVALID_EMAIL_OR_PASSWORD)));
                             break;
                         default:
                             errors.Add(new Error(ErrorType.Exception, Errors.UNKNOWN, key: nameof(Errors.UNKNOWN)));

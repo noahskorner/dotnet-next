@@ -1,11 +1,13 @@
-﻿namespace Api.Controllers.Api.Users.Create
+﻿using MediatR;
+
+namespace Services.Features.Auth.Login
 {
-    public class CreateUserRequest
+    public class LoginCommand : IRequest<AuthDto>
     {
         public string Email { get; }
         public string Password { get; }
 
-        public CreateUserRequest(string email, string password)
+        public LoginCommand(string email, string password)
         {
             Email = email;
             Password = password;

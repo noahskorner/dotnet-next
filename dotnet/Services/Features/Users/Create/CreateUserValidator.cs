@@ -9,10 +9,12 @@ namespace Services.Features.Users.Create
         public CreateUserValidator()
         {
             RuleFor(x => x.Email)
+                .NotEmpty()
                 .EmailAddress()
                 .WithMessage($"Must provide a valid {nameof(CreateUserCommand.Email)}");
 
             RuleFor(x => x.Password)
+                .NotEmpty()
                 .MinimumLength(DataConfiguration.MIN_PASSWORD_LENGTH)
                 .MaximumLength(DataConfiguration.SHORT_STRING_LENGTH)
                 .WithMessage($"{nameof(CreateUserCommand.Password)} must be between {DataConfiguration.MIN_PASSWORD_LENGTH}-{DataConfiguration.SHORT_STRING_LENGTH} characters.");

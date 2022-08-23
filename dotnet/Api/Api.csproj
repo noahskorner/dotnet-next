@@ -44,7 +44,12 @@
     <InternalsVisibleTo Include="Test" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <ItemGroup>
+    <Folder Include="Controllers\Api\Auth\Logout\" />
+    <Folder Include="Controllers\Api\Auth\RefreshToken\" />
+  </ItemGroup>
+
+  <Target Condition="'$(Configuration)'=='Debug|AnyCPU'" Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="dotnet swagger tofile --output swagger.json bin/debug/net6.0/Api.dll v1" />
   </Target>
 

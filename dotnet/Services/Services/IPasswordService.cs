@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 
-namespace Services.Features.Users
+namespace Services.Services
 {
     public interface IPasswordService
     {

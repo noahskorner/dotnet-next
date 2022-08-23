@@ -7,9 +7,9 @@ using Services.Features.Users.Create;
 
 namespace Api.Controllers.Api.Users.Create
 {
-    [Route("api/user")]
+    [Route("v1/user")] // TODO: Find a more elegant way to do this
     [ApiController]
-    public class CreateUserController : ControllerBase
+    public class CreateUserController : ApiController
     {
         private readonly IMediator _mediator;
         private readonly IStringLocalizer _localizer;
@@ -31,13 +31,8 @@ namespace Api.Controllers.Api.Users.Create
         {
             var command = new CreateUserCommand(request.Email, request.Password);
             var result = await _mediator.Send(command);
-            return Created("", new Result<UserDto>(result));
-        }
 
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok(_localizer.GetString("Test"));
+            return Created($"https://localhost:5000/v1/{result.Id}", new Result<UserDto>(result)); // TODO: Find a more elegant way to do this
         }
     }
 }

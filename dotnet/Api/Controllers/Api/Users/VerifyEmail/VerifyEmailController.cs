@@ -6,9 +6,9 @@ using Services.Features.Users.VerifyEmail;
 
 namespace Api.Controllers.Api.Users.VerifyEmail
 {
-    [Route("api/user/{userId}/verify-email")]
+    [Route("v1/user/{userId}/verify-email")]
     [ApiController]
-    public class VerifyEmailController : ControllerBase
+    public class VerifyEmailController : ApiController
     {
         private readonly IMediator _mediator;
 

@@ -1,11 +1,11 @@
-﻿namespace Api.Controllers.Api.Users.Create
+﻿namespace Api.Controllers.Api.Auth.Login
 {
-    public class CreateUserRequest
+    public class LoginRequest
     {
         public string Email { get; }
         public string Password { get; }
 
-        public CreateUserRequest(string email, string password)
+        public LoginRequest(string email, string password)
         {
             Email = email;
             Password = password;

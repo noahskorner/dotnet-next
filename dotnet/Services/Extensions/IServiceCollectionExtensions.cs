@@ -8,7 +8,6 @@ using Services.PipelineBehaviors;
 using Services.Providers.MailProvider;
 using Services.Configuration;
 using Services.Services;
-using Services.Features.Users;
 
 namespace Services.Extensions
 {
