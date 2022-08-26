@@ -4,8 +4,6 @@ namespace Services.Features.Auth.Login
 {
     public class LoginValidator : AbstractValidator<LoginCommand>
     {
-        private readonly IStringLocalizer _localizer;
-
         public LoginValidator()
         {
             RuleFor(x => x.Email)
