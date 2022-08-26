@@ -14,6 +14,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Api.Localization;
 using Services.Features.Auth.Login;
+using Microsoft.Extensions.Localization;
 
 namespace Api.Extensions
 {
@@ -40,6 +41,7 @@ namespace Api.Extensions
 
         public static void UseDefaultExceptionHandler(this WebApplication app)
         {
+            var localizer = app.Services.GetRequiredService<IStringLocalizer>();
             var jsonSerializerOptions = new JsonSerializerOptions()
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -71,23 +73,23 @@ namespace Api.Extensions
                             break;
                         case CreateUserAlreadyExistsException createUserAlreadyExistsException:
                             statusCode = (int)HttpStatusCode.BadRequest;
-                            errors.Add(new Error(ErrorType.Exception, Errors.CREATE_USER_AREADY_EXISTS, key: nameof(Errors.CREATE_USER_AREADY_EXISTS)));
+                            errors.Add(new Error(ErrorType.Exception, localizer.GetString(Errors.CREATE_USER_AREADY_EXISTS), key: Errors.CREATE_USER_AREADY_EXISTS));
                             break;
                         case VerifyEmailUserNotFoundException verifyEmailUserNotFoundException:
                             statusCode = (int)HttpStatusCode.NotFound;
-                            errors.Add(new Error(ErrorType.Exception, Errors.CREATE_USER_NOT_FOUND, key: nameof(Errors.CREATE_USER_NOT_FOUND)));
+                            errors.Add(new Error(ErrorType.Exception, localizer.GetString(Errors.CREATE_USER_NOT_FOUND), key: Errors.CREATE_USER_NOT_FOUND));
                             break;
                         case VerifyEmailInvalidTokenException verifyEmailInvalidTokenException:
                             statusCode = (int)HttpStatusCode.Unauthorized;
-                            errors.Add(new Error(ErrorType.Exception, Errors.VERIFY_EMAIL_INVALID_TOKEN, key: nameof(Errors.VERIFY_EMAIL_INVALID_TOKEN)));
+                            errors.Add(new Error(ErrorType.Exception, localizer.GetString(Errors.VERIFY_EMAIL_INVALID_TOKEN), key: Errors.VERIFY_EMAIL_INVALID_TOKEN));
                             break;
                         case LoginUserNotFoundException userNotFoundException:
                         case LoginInvalidPasswordException invalidPasswordException:
                             statusCode = (int)HttpStatusCode.Unauthorized;
-                            errors.Add(new Error(ErrorType.Exception, Errors.LOGIN_USER_INVALID_EMAIL_OR_PASSWORD, key: nameof(Errors.LOGIN_USER_INVALID_EMAIL_OR_PASSWORD)));
+                            errors.Add(new Error(ErrorType.Exception, localizer.GetString(Errors.LOGIN_USER_INVALID_EMAIL_OR_PASSWORD), key: Errors.LOGIN_USER_INVALID_EMAIL_OR_PASSWORD));
                             break;
                         default:
-                            errors.Add(new Error(ErrorType.Exception, Errors.UNKNOWN, key: nameof(Errors.UNKNOWN)));
+                            errors.Add(new Error(ErrorType.Exception, localizer.GetString(Errors.UNKNOWN), key: Errors.UNKNOWN));
                             break;
                     }
 

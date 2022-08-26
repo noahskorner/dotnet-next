@@ -1,3 +1,7 @@
 ﻿{
-  "Test":  "This is a test"
+  "UNKNOWN": "An unkown issue has occurred. Please try again.",
+  "CREATE_USER_AREADY_EXISTS": "A user with that email already exists.",
+  "CREATE_USER_NOT_FOUND": "This user does not exist.",
+  "VERIFY_EMAIL_INVALID_TOKEN": "Your token was invalid.",
+  "LOGIN_USER_INVALID_EMAIL_OR_PASSWORD": "Incorrect email or password. Please try again."
 }
