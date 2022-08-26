@@ -10,7 +10,8 @@
 ### Development Setup
 
 ## Todo
-= [ ] Fix Test project DB / perf
+= [x] Fix Test project DB / perf
+- [ ] Elegantly store routes
 - [ ] Add Localization to exceptions
 - [ ] Add Logging Service
 - [ ] Create<> Fixtures

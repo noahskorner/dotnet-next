@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Test.Extensions;
+using Services.Features.Users;
+using Api.Controllers.Api.Users.Create;
+using System.Net.Http.Json;
 
 namespace Test
 {
@@ -43,6 +46,14 @@ namespace Test
         public void ControllerTearDown()
         {
             _context.Database.EnsureDeleted();
+        }
+
+        protected async Task<UserDto> CreateUser(string email =  "jon.snow@gmail.com", string password = "123456aB$")
+        {
+            var createUserRequest = new CreateUserRequest(email, password);
+            var createUserResult = await _sut.PostAsJsonAsync("v1/user", createUserRequest).AsCreated<UserDto>();
+            
+            return createUserResult.Data;
         }
     }
 }

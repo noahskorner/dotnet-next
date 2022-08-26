@@ -71,9 +71,7 @@ namespace Test.Integration.Features.Users.Create
         {
             // Arrange
             var email = _faker.Internet.Email();
-            var existingUserRequest = new CreateUserRequest(email, "123456aB$");
-            await _sut.PostAsJsonAsync(BASE_URL, existingUserRequest);
-
+            await CreateUser(email);
             var request = new CreateUserRequest(email, "123456aB$");
 
             // Act && Assert
@@ -85,9 +83,7 @@ namespace Test.Integration.Features.Users.Create
         {
             // Arrange
             var email = _faker.Internet.Email();
-            var existingUserRequest = new CreateUserRequest(email, "123456aB$");
-            await _sut.PostAsJsonAsync(BASE_URL, existingUserRequest);
-
+            await CreateUser(email);
             var request = new CreateUserRequest(email, "123456aB$");
 
             // Act

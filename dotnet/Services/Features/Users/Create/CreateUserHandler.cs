@@ -3,6 +3,8 @@ using Data.Repositories.Users;
 using MediatR;
 using Services.Configuration;
 using Services.Services;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Services.Features.Users.Create
 {
@@ -40,12 +42,23 @@ namespace Services.Features.Users.Create
             if (existingUser != null) throw new CreateUserAlreadyExistsException();
 
             var hashedPassword = _passwordService.Hash(command.Password);
-            var emailVerificationToken = _jwtService.GenerateToken(_jwtConfig.EmailVerificationSecret);
+            var emailVerificationToken = GetEmailVerificationToken(command.Email);
             var user = await _createUser.Execute(command.Email, hashedPassword, emailVerificationToken);
 
             await _publisher.Publish(new UserCreatedEvent(user.Id, user.Email, user.EmailVerificationToken));
 
             return _mapper.Map<UserDto>(user);
+        }
+
+        private string GetEmailVerificationToken(string email)
+        {
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Email, email),
+            };
+            var request = new GenerateTokenRequest(_jwtConfig.EmailVerificationSecret, claims, null);
+
+            return _jwtService.GenerateToken(request);
         }
     }
 

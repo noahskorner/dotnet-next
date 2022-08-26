@@ -26,7 +26,7 @@ namespace Data.Repositories.Users
 
             entity.Property(x => x.EmailVerificationToken)
                   .IsRequired(false)
-                  .HasMaxLength(DataConfiguration.SHORT_STRING_LENGTH);
+                  .HasMaxLength(DataConfiguration.MEDIUM_STRING_LENGTH);
 
             entity.Property(x => x.IsEmailVerified)
                   .HasDefaultValue(false);

@@ -91,9 +91,7 @@ namespace Test.Integration.Features.Auth.Login
         public async Task ReturnUnauthorizedWhenUserPasswordNotValid()
         {
             // Arrange
-            var createUserRequest = new CreateUserRequest(_faker.Internet.Email(), "123456aB$");
-            var createUserResult = await _sut.PostAsJsonAsync("v1/user", createUserRequest).AsCreated<UserDto>();
-            var user = createUserResult.Data;
+            var user = await CreateUser();
             var request = new LoginRequest(user.Email, _faker.Internet.Password());
 
             // Act && Assert
@@ -104,9 +102,7 @@ namespace Test.Integration.Features.Auth.Login
         public async Task ReturnInvalidEmailOrPasswordErrorWhenPasswordNotValid()
         {
             // Arrange
-            var createUserRequest = new CreateUserRequest(_faker.Internet.Email(), "123456aB$");
-            var createUserResult = await _sut.PostAsJsonAsync("v1/user", createUserRequest).AsCreated<UserDto>();
-            var user = createUserResult.Data;
+            var user = await CreateUser();
             var request = new LoginRequest(user.Email, _faker.Internet.Password());
 
             // Act
@@ -121,9 +117,7 @@ namespace Test.Integration.Features.Auth.Login
         {
             // Arrange
             var password = "123456aB$";
-            var createUserRequest = new CreateUserRequest(_faker.Internet.Email(), password);
-            var createUserResult = await _sut.PostAsJsonAsync("v1/user", createUserRequest).AsCreated<UserDto>();
-            var user = createUserResult.Data;
+            var user = await CreateUser(password: password);
             var request = new LoginRequest(user.Email, password);
 
             // Act && Assert
@@ -135,9 +129,7 @@ namespace Test.Integration.Features.Auth.Login
         {
             // Arrange
             var password = "123456aB$";
-            var createUserRequest = new CreateUserRequest(_faker.Internet.Email(), password);
-            var createUserResult = await _sut.PostAsJsonAsync("v1/user", createUserRequest).AsCreated<UserDto>();
-            var user = createUserResult.Data;
+            var user = await CreateUser(password: password);
             var request = new LoginRequest(user.Email, password);
 
             // Act
@@ -159,6 +151,8 @@ namespace Test.Integration.Features.Auth.Login
 
             // Act
             var result = await _sut.PostAsJsonAsync(BASE_URL, request);
+
+            // TODO
         }
     }
 }

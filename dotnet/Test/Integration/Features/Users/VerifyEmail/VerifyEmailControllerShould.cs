@@ -23,10 +23,8 @@ namespace Test.Integration.Features.Users.VerifyEmail
         public async Task ReturnUnauthorizedWhenTokenNotValid()
         {
             // Arrange
-            var createUserRequest = new CreateUserRequest(_faker.Internet.Email(), "123456aB$");
-            var createUserResult = await _sut.PostAsJsonAsync(BASE_URL, createUserRequest).AsCreated<UserDto>();
-            var userEntity = await _context.User.FindAsync(createUserResult.Data.Id);
-            var url = GetUrl(userEntity?.Id ?? 0, "token");
+            var user = await CreateUser();
+            var url = GetUrl(user.Id, "token");
 
             // Act && Assert
             await _sut.PutAsync(url, null).AsUnauthorized<UserDto>();
@@ -36,10 +34,10 @@ namespace Test.Integration.Features.Users.VerifyEmail
         public async Task ReturnOkWhenTokenIsValid()
         {
             // Arrange
-            var createUserRequest = new CreateUserRequest(_faker.Internet.Email(), "123456aB$");
-            var createUserResult = await _sut.PostAsJsonAsync(BASE_URL, createUserRequest).AsCreated<UserDto>();
-            var userEntity = await _context.User.FindAsync(createUserResult.Data.Id);
-            var url = GetUrl(1, userEntity?.EmailVerificationToken ?? "");
+            var user = await CreateUser();
+            var userEntity = await _context.User.FindAsync(user.Id);
+            var verificationToken = userEntity?.EmailVerificationToken ?? throw new Exception();
+            var url = GetUrl(user.Id, verificationToken);
 
             // Act && Assert
             await _sut.PutAsync(url, null).AsOk<UserDto>();
@@ -49,17 +47,16 @@ namespace Test.Integration.Features.Users.VerifyEmail
         public async Task ReturnEmailWhenTokenIsValid()
         {
             // Arrange
-            var email = _faker.Internet.Email();
-            var createUserRequest = new CreateUserRequest(email, "123456aB$");
-            var createUserResult = await _sut.PostAsJsonAsync(BASE_URL, createUserRequest).AsCreated<UserDto>();
-            var userEntity = await _context.User.FindAsync(createUserResult.Data.Id);
-            var url = GetUrl(1, userEntity?.EmailVerificationToken ?? "");
+            var user = await CreateUser();
+            var userEntity = await _context.User.FindAsync(user.Id);
+            var verificationToken = userEntity?.EmailVerificationToken ?? throw new Exception();
+            var url = GetUrl(user.Id, verificationToken);
 
             // Act
             var result = await _sut.PutAsync(url, null).AsOk<UserDto>();
 
             // Assert
-            Assert.That(result.Data.Email, Is.EqualTo(email));
+            Assert.That(result.Data.Email, Is.EqualTo(user.Email));
         }
 
         private string GetUrl(long userId, string token)

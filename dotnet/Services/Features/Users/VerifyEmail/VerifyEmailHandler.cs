@@ -34,12 +34,18 @@ namespace Services.Features.Users.VerifyEmail
             if (user == null) throw new VerifyEmailUserNotFoundException(command.UserId);
             if (user.EmailVerificationToken != command.Token) throw new VerifyEmailInvalidTokenException(command.UserId, command.Token);
 
-            var isValidToken = _jwtService.ValidateToken(command.Token, _jwtConfig.EmailVerificationSecret);
+            var isValidToken = ValidateEmailVerificationToken(command.Token);
             if (!isValidToken) throw new VerifyEmailInvalidTokenException(command.UserId, command.Token);
 
             var updatedUser = await _updateIsEmailVerified.Execute(command.UserId, true);
 
             return _mapper.Map<UserDto>(updatedUser);
+        }
+
+        private bool ValidateEmailVerificationToken(string token)
+        {
+            var request = new ValidateTokenRequest(token, _jwtConfig.EmailVerificationSecret, false);
+            return _jwtService.ValidateToken(request);
         }
     }
 

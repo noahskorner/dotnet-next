@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Data.Configuration;
 using Data.Repositories.Users;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Data.Extensions
 {
@@ -25,17 +26,16 @@ namespace Data.Extensions
                 .AddDbContextPool<ApiContext>(options => options
                     .UseSqlServer(sqlConfig.ConnectionString)
                     .EnableSensitiveDataLogging(sqlConfig.EnableSensitiveDataLogging), sqlConfig.PoolSize);
-
             return services;
         }
 
         public static IServiceCollection AddInMemoryDatabase(this IServiceCollection services)
         {
-            services
-                .AddDbContextPool<ApiContext>(options => options
-                    .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-                    .EnableSensitiveDataLogging(true)
-                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking), 256);
+            var _contextOptions = new DbContextOptionsBuilder<ApiContext>()
+                .UseInMemoryDatabase("BloggingControllerTest")
+                .ConfigureWarnings(b => b.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+                .Options;
+            services.AddSingleton((sp) => new ApiContext(_contextOptions));
 
             return services;
         }

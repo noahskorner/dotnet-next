@@ -2,6 +2,8 @@
 using MediatR;
 using Services.Configuration;
 using Services.Services;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Services.Features.Auth.Login
 {
@@ -32,10 +34,36 @@ namespace Services.Features.Auth.Login
             var isValidPassword = _passwordService.Verify(command.Password, user.Password);
             if (!isValidPassword) throw new LoginInvalidPasswordException(command.Email);
 
-            var accessToken = _jwtService.GenerateToken(_jwtConfig.AccessTokenSecret);
-            var refreshToken = _jwtService.GenerateToken(_jwtConfig.RefreshTokenSecret);
+            var accessToken = GetAccessToken(user.Id, user.Email);
+            var refreshToken = GetRefreshToken(user.Id, user.Email);
 
             return new AuthDto(accessToken, refreshToken);
+        }
+
+        private string GetAccessToken(long userId, string email)
+        {
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                new Claim(ClaimTypes.Email, email),
+            };
+            var expiresIn = DateTime.UtcNow + _jwtConfig.AccessTokenExpiresIn;
+            var request = new GenerateTokenRequest(_jwtConfig.AccessTokenSecret, claims, expiresIn);
+
+            return _jwtService.GenerateToken(request);
+        }
+
+        private string GetRefreshToken(long userId, string email)
+        {
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                new Claim(ClaimTypes.Email, email),
+            };
+            var expiresIn = DateTime.UtcNow + _jwtConfig.RefreshTokenExpiresIn;
+            var request = new GenerateTokenRequest(_jwtConfig.RefreshTokenSecret, claims, expiresIn);
+
+            return _jwtService.GenerateToken(request);
         }
     }
 
