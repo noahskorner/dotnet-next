@@ -1,7 +1,7 @@
 ﻿using Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Services.Features.Auth;
+using Services.Configuration;
 using Services.Features.Auth.Login;
 
 namespace Api.Controllers.Api.Auth.Login
@@ -9,11 +9,14 @@ namespace Api.Controllers.Api.Auth.Login
     [Route("v1/auth")]
     public class LoginController : ApiController
     {
+        public const string TOKEN_COOKIE_KEY = "Token";
         private readonly IMediator _mediator;
+        private readonly AppConfiguration _appConfig;
 
-        public LoginController(IMediator mediator)
+        public LoginController(IMediator mediator, AppConfiguration appConfig)
         {
             _mediator = mediator;
+            _appConfig = appConfig;
         }
 
         /// <summary>
@@ -27,10 +30,14 @@ namespace Api.Controllers.Api.Auth.Login
             var command = new LoginCommand(request.Email, request.Password);
             var result = await _mediator.Send(command);
 
-            Response.Cookies.Append("token", result.RefreshToken, new CookieOptions() { Domain = "localhost", Secure = true }); // TODO: Add expiration, constant for cookie key, etc.
+            var cookieOptions = GetTokenCookieOptions(result.RefreshTokenExpiration);
+            Response.Cookies.Append(TOKEN_COOKIE_KEY, result.RefreshToken, cookieOptions);
             var response = new LoginResponse(result.RefreshToken);
 
             return Created(new Result<LoginResponse>(response));
         }
+
+        private CookieOptions GetTokenCookieOptions(DateTime refreshTokenExpiration) => 
+            new CookieOptions() { Domain = _appConfig.BackendDomain, Secure = true, Expires = refreshTokenExpiration };
     }
 }

@@ -35,9 +35,12 @@ namespace Services.Features.Auth.Login
             if (!isValidPassword) throw new LoginInvalidPasswordException(command.Email);
 
             var accessToken = GetAccessToken(user.Id, user.Email);
-            var refreshToken = GetRefreshToken(user.Id, user.Email);
+            var (refreshToken, refreshTokenExpiration) = GetRefreshToken(user.Id, user.Email);
 
-            return new AuthDto(accessToken, refreshToken);
+            return new AuthDto(
+                accessToken,
+                refreshToken,
+                refreshTokenExpiration);
         }
 
         private string GetAccessToken(long userId, string email)
@@ -53,7 +56,7 @@ namespace Services.Features.Auth.Login
             return _jwtService.GenerateToken(request);
         }
 
-        private string GetRefreshToken(long userId, string email)
+        private (string, DateTime) GetRefreshToken(long userId, string email)
         {
             var claims = new List<Claim>()
             {
@@ -63,7 +66,7 @@ namespace Services.Features.Auth.Login
             var expiresIn = DateTime.UtcNow + _jwtConfig.RefreshTokenExpiresIn;
             var request = new GenerateTokenRequest(_jwtConfig.RefreshTokenSecret, claims, expiresIn);
 
-            return _jwtService.GenerateToken(request);
+            return (_jwtService.GenerateToken(request), expiresIn);
         }
     }
 

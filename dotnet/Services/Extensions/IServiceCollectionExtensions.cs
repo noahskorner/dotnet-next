@@ -28,7 +28,7 @@ namespace Services.Extensions
         {
             services.AddSingleton((sp) => configuration.GetSection(SmtpConfiguration.Smtp).Get<SmtpConfiguration>());
             services.AddSingleton((sp) => configuration.GetSection(JwtConfiguration.Jwt).Get<JwtConfiguration>());
-            services.AddSingleton((sp) => configuration.GetSection(FrontendConfiguration.Frontend).Get<FrontendConfiguration>());
+            services.AddSingleton((sp) => configuration.GetSection(AppConfiguration.App).Get<AppConfiguration>());
 
             return services;
         }

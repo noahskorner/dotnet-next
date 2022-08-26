@@ -1,8 +1,8 @@
 ﻿using Api.Controllers.Api.Auth.Login;
 using Api.Controllers.Api.Users.Create;
 using Domain.Constants;
-using Services.Features.Auth;
 using Services.Features.Users;
+using System.Net;
 using System.Net.Http.Json;
 using Test.Extensions;
 
@@ -152,7 +152,12 @@ namespace Test.Integration.Features.Auth.Login
             // Act
             var result = await _sut.PostAsJsonAsync(BASE_URL, request);
 
-            // TODO
+            // Assert
+            var refreshTokenCookie = result.Headers
+                .FirstOrDefault(header => header.Key == "Set-Cookie")
+                .Value
+                .FirstOrDefault(x => x.Contains(LoginController.TOKEN_COOKIE_KEY));
+            Assert.That(refreshTokenCookie, Is.Not.Null);
         }
     }
 }
