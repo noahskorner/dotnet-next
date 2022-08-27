@@ -10,6 +10,7 @@
 ### Development Setup
 
 ## Todo
+- [ ] Fix swagger page
 - [ ] Add Rate Limiting
 - [ ] Add Logging Service
 - [ ] Add Api Caching
