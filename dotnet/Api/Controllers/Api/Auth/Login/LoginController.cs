@@ -1,4 +1,6 @@
-﻿using Api.Models;
+﻿using Api.Extensions;
+using Api.Models;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Services.Configuration;
@@ -11,11 +13,16 @@ namespace Api.Controllers.Api.Auth.Login
     {
         public const string TOKEN_COOKIE_KEY = "Token";
         private readonly IMediator _mediator;
+        private readonly IValidator<LoginRequest> _validator;
         private readonly AppConfiguration _appConfig;
 
-        public LoginController(IMediator mediator, AppConfiguration appConfig)
+        public LoginController(
+            IMediator mediator,
+            IValidator<LoginRequest> validator,
+            AppConfiguration appConfig)
         {
             _mediator = mediator;
+            _validator = validator;
             _appConfig = appConfig;
         }
 
@@ -27,6 +34,8 @@ namespace Api.Controllers.Api.Auth.Login
 
         public async Task<IActionResult> Post([FromBody] LoginRequest request)
         {
+            await _validator.ValidateAsyncOrThrow(request);
+
             var command = new LoginCommand(request.Email, request.Password);
             var result = await _mediator.Send(command);
 

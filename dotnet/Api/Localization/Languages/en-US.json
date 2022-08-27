@@ -2,6 +2,14 @@
   "UNKNOWN": "An unkown issue has occurred. Please try again.",
   "CREATE_USER_AREADY_EXISTS": "A user with that email already exists.",
   "CREATE_USER_NOT_FOUND": "This user does not exist.",
+  "CREATE_USER_EMAIL_NOT_VALID": "Must provide a valid email.",
+  "CREATE_USER_PASSWORD_LENGTH": "Password must be between {0} and {1} characters.",
+  "CREATE_USER_PASSWORD_MUST_CONTAIN_UPPERCASE": "Password must contain an uppercase letter.",
+  "CREATE_USER_PASSWORD_MUST_CONTAIN_NUMBER": "Password must contain a number.",
+  "CREATE_USER_PASSWORD_MUST_CONTAIN_SYMBOL": "Password must contain a symbol.",
+  "CREATE_USER_PASSWORD_NOT_VALID": "Password must only contain numbers, letters, and symbols (!@#$%^&*()_+=\\[{{]}};:<>|/?,)",
   "VERIFY_EMAIL_INVALID_TOKEN": "Your token was invalid.",
-  "LOGIN_USER_INVALID_EMAIL_OR_PASSWORD": "Incorrect email or password. Please try again."
+  "LOGIN_USER_INVALID_EMAIL_OR_PASSWORD": "Incorrect email or password. Please try again.",
+  "LOGIN_EMAIL_NOT_VALID": "Must provide a valid email",
+  "LOGIN_MUST_PROVIDE_PASSWORD":  "Must provide a password."
 }

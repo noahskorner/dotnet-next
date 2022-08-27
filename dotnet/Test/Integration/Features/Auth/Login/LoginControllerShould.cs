@@ -1,6 +1,6 @@
-﻿using Api.Controllers.Api.Auth.Login;
+﻿using Api.Constants;
+using Api.Controllers.Api.Auth.Login;
 using Api.Controllers.Api.Users.Create;
-using Domain.Constants;
 using Services.Features.Users;
 using System.Net;
 using System.Net.Http.Json;

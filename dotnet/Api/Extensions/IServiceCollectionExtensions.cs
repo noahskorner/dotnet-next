@@ -1,8 +1,10 @@
 ﻿using Api.Configuration;
 using Api.Extensions;
 using Api.Localization;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text.Json;
 
 namespace Api.Extensions
@@ -76,6 +78,7 @@ namespace Api.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddSingleton<IStringLocalizer, JsonStringLocalizer>();
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             return services;
         }

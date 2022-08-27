@@ -1,23 +1,32 @@
-﻿using Data.Configuration;
+﻿using Api.Constants;
+using Data.Configuration;
 using FluentValidation;
+using Microsoft.Extensions.Localization;
 using System.Text.RegularExpressions;
 
-namespace Services.Features.Users.Create
+namespace Api.Controllers.Api.Users.Create
 {
-    public class CreateUserValidator : AbstractValidator<CreateUserCommand>
+    public class CreateUserValidator : AbstractValidator<CreateUserRequest>
     {
-        public CreateUserValidator()
+        private readonly IStringLocalizer _localizer;
+
+        public CreateUserValidator(IStringLocalizer localizer)
         {
+            _localizer = localizer;
+
             RuleFor(x => x.Email)
                 .NotEmpty()
                 .EmailAddress()
-                .WithMessage($"Must provide a valid {nameof(CreateUserCommand.Email)}");
+                .WithMessage(_localizer.GetString(ValidationErrors.CREATE_USER_EMAIL_NOT_VALID));
 
             RuleFor(x => x.Password)
                 .NotEmpty()
                 .MinimumLength(DataConfiguration.MIN_PASSWORD_LENGTH)
                 .MaximumLength(DataConfiguration.SHORT_STRING_LENGTH)
-                .WithMessage($"{nameof(CreateUserCommand.Password)} must be between {DataConfiguration.MIN_PASSWORD_LENGTH}-{DataConfiguration.SHORT_STRING_LENGTH} characters.");
+                .WithMessage(_localizer.GetString(
+                    ValidationErrors.CREATE_USER_PASSWORD_LENGTH,
+                    DataConfiguration.MIN_PASSWORD_LENGTH,
+                    DataConfiguration.SHORT_STRING_LENGTH));
             RuleFor(x => x.Password)
                 .Must(password =>
                 {
@@ -25,7 +34,7 @@ namespace Services.Features.Users.Create
 
                     return hasUpperChar.IsMatch(password);
                 })
-                .WithMessage($"{nameof(CreateUserCommand.Password)} must contain an uppercase letter.");
+                .WithMessage(_localizer.GetString(ValidationErrors.CREATE_USER_PASSWORD_MUST_CONTAIN_UPPERCASE));
             RuleFor(x => x.Password)
                 .Must(password =>
                 {
@@ -33,7 +42,7 @@ namespace Services.Features.Users.Create
 
                     return hasNumber.IsMatch(password);
                 })
-                .WithMessage($"{nameof(CreateUserCommand.Password)} must contain a number.");
+                .WithMessage(_localizer.GetString(ValidationErrors.CREATE_USER_PASSWORD_MUST_CONTAIN_NUMBER));
             RuleFor(x => x.Password)
                 .Must(password =>
                 {
@@ -41,7 +50,7 @@ namespace Services.Features.Users.Create
 
                     return hasSymbols.IsMatch(password);
                 })
-                .WithMessage($"{nameof(CreateUserCommand.Password)} must contain a symbol.");
+                .WithMessage(_localizer.GetString(ValidationErrors.CREATE_USER_PASSWORD_MUST_CONTAIN_SYMBOL));
             RuleFor(x => x.Password)
                 .Must(password =>
                 {
@@ -50,7 +59,7 @@ namespace Services.Features.Users.Create
 
                     return !invalidCharacters.Any();
                 })
-                .WithMessage($"{nameof(CreateUserCommand.Password)} must only contain numbers, letters, and symbols (!@#$%^&*()_+=\\[{{]}};:<>|/?,)");
+                .WithMessage(_localizer.GetString(ValidationErrors.CREATE_USER_PASSWORD_NOT_VALID));
         }
     }
 }

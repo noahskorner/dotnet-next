@@ -1,10 +1,8 @@
-﻿using FluentValidation;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Data.Extensions;
-using Services.PipelineBehaviors;
 using Services.Providers.MailProvider;
 using Services.Configuration;
 using Services.Services;
@@ -43,7 +41,6 @@ namespace Services.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSingleton<IJwtService, JwtService>();
             services.AddSingleton<IPasswordService, PasswordService>();
@@ -53,8 +50,6 @@ namespace Services.Extensions
 
         public static IServiceCollection AddPipelineBehaviors(this IServiceCollection services)
         {
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-
             return services;
         }
     }

@@ -1,7 +1,8 @@
-﻿using Api.Models;
+﻿using Api.Extensions;
+using Api.Models;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 using Services.Features.Users;
 using Services.Features.Users.Create;
 
@@ -12,14 +13,14 @@ namespace Api.Controllers.Api.Users.Create
     public class CreateUserController : ApiController
     {
         private readonly IMediator _mediator;
-        private readonly IStringLocalizer _localizer;
+        private readonly IValidator<CreateUserRequest> _validator;
 
         public CreateUserController(
             IMediator mediator,
-            IStringLocalizer localizer)
+            IValidator<CreateUserRequest> validator)
         {
             _mediator = mediator;
-            _localizer = localizer;
+            _validator = validator;
         }
 
         /// <summary>
@@ -29,6 +30,8 @@ namespace Api.Controllers.Api.Users.Create
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Post(CreateUserRequest request)
         {
+            await _validator.ValidateAsyncOrThrow(request);
+
             var command = new CreateUserCommand(request.Email, request.Password);
             var result = await _mediator.Send(command);
 

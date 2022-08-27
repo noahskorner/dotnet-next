@@ -8,13 +8,13 @@ using System.Text;
 using System.Text.Json;
 using Services.Features.Users.Create;
 using Services.Features.Users.VerifyEmail;
-using Domain.Constants;
 using Api.Enumerations;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Api.Localization;
 using Services.Features.Auth.Login;
 using Microsoft.Extensions.Localization;
+using Api.Constants;
 
 namespace Api.Extensions
 {

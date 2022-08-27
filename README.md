@@ -11,8 +11,10 @@
 
 ## Todo
 = [x] Fix Test project DB / perf
+- [x] Move validation logic back to API layer
+- [x] Add Localization to validation exceptions
 - [ ] Elegantly store routes
-- [ ] Add Localization to exceptions
+- [x] Add Localization to exceptions
 - [ ] Add Logging Service
 - [ ] Create<> Fixtures
 - [ ] Add Rate Limiting
