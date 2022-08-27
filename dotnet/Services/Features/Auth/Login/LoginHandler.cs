@@ -12,17 +12,20 @@ namespace Services.Features.Auth.Login
         private readonly IPasswordService _passwordService;
         private readonly IJwtService _jwtService;
         private readonly JwtConfiguration _jwtConfig;
+        private readonly IDateService _dateService;
 
         public LoginHandler(
             IGetUserByEmail getUserByEmail,
             IPasswordService passwordService,
             IJwtService jwtService,
-            JwtConfiguration jwtConfig)
+            JwtConfiguration jwtConfig,
+            IDateService dateService)
         {
             _getUserByEmail = getUserByEmail;
             _passwordService = passwordService;
             _jwtService = jwtService;
             _jwtConfig = jwtConfig;
+            _dateService = dateService;
         }
 
         public async Task<AuthDto> Handle(LoginCommand command, CancellationToken cancellationToken)
@@ -49,20 +52,20 @@ namespace Services.Features.Auth.Login
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 new Claim(ClaimTypes.Email, email),
             };
-            var expiresIn = DateTime.UtcNow + _jwtConfig.AccessTokenExpiresIn;
+            var expiresIn = _dateService.UtcNow() + _jwtConfig.AccessTokenExpiresIn;
             var request = new GenerateTokenRequest(_jwtConfig.AccessTokenSecret, claims, expiresIn);
 
             return _jwtService.GenerateToken(request);
         }
 
-        private (string, DateTime) GetRefreshToken(long userId, string email)
+        private (string, DateTimeOffset) GetRefreshToken(long userId, string email)
         {
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 new Claim(ClaimTypes.Email, email),
             };
-            var expiresIn = DateTime.UtcNow + _jwtConfig.RefreshTokenExpiresIn;
+            var expiresIn = _dateService.UtcNow() + _jwtConfig.RefreshTokenExpiresIn;
             var request = new GenerateTokenRequest(_jwtConfig.RefreshTokenSecret, claims, expiresIn);
 
             return (_jwtService.GenerateToken(request), expiresIn);

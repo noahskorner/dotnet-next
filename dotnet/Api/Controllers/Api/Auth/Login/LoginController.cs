@@ -47,7 +47,7 @@ namespace Api.Controllers.Api.Auth.Login
             return Created(new Result<LoginResponse>(response));
         }
 
-        private CookieOptions GetTokenCookieOptions(DateTime refreshTokenExpiration) => 
+        private CookieOptions GetTokenCookieOptions(DateTimeOffset refreshTokenExpiration) => 
             new CookieOptions() { Domain = _appConfig.BackendDomain, Secure = true, Expires = refreshTokenExpiration };
     }
 }

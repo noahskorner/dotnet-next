@@ -10,13 +10,14 @@
 ### Development Setup
 
 ## Todo
-- [ ] Add Date service for mocking
 - [ ] Add Rate Limiting
 - [ ] Add Logging Service
 - [ ] Add Api Caching
 - [ ] Add Prettier / ESLint
 - [ ] Add Jest / Cypress
 - [ ] Add Redis for in memory caching
+- [ ] Add git hooks for formatting / running tests
+- [x] Add Date service for mocking
 = [x] Fix Test project DB / perf
 - [x] Move validation logic back to API layer
 - [x] Add Localization to validation exceptions

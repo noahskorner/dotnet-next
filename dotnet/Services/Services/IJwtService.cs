@@ -15,8 +15,8 @@ namespace Services.Services
     {
         public string SecretKey { get; }
         public IEnumerable<Claim> Claims { get; }
-        public DateTime? Expires { get; }
-        public GenerateTokenRequest(string secretKey, IEnumerable<Claim> claims, DateTime? expires)
+        public DateTimeOffset? Expires { get; }
+        public GenerateTokenRequest(string secretKey, IEnumerable<Claim> claims, DateTimeOffset? expires)
         {
             SecretKey = secretKey;
             Claims = claims;
@@ -42,10 +42,14 @@ namespace Services.Services
     public class JwtService : IJwtService
     {
         private readonly JwtConfiguration _jwtConfig;
+        private readonly IDateService _dateService;
 
-        public JwtService(JwtConfiguration jwtConfig)
+        public JwtService(
+            JwtConfiguration jwtConfig,
+            IDateService dateService)
         {
             _jwtConfig = jwtConfig;
+            _dateService = dateService;
         }
 
         public string GenerateToken(GenerateTokenRequest request)
@@ -57,8 +61,8 @@ namespace Services.Services
                 issuer: _jwtConfig.Issuer,
                 audience: _jwtConfig.Audience,
                 claims: request.Claims,
-                notBefore: DateTime.UtcNow,
-                expires: request.Expires,
+                notBefore: _dateService.UtcNow().DateTime,
+                expires: request.Expires?.DateTime ?? null,
                 signingCredentials: credentials);
 
             var handler = new JwtSecurityTokenHandler();
