@@ -21,7 +21,7 @@ namespace Test.Unit.Services
         }
 
         [Test]
-        public void ReturnTrueWhenTokenIsValid()
+        public void ReturnSecurityTokenWhenTokenIsValid()
         {
             // Arrange
             var generateTokenRequest = new GenerateTokenRequest(_secretKey, new List<Claim>(), null);
@@ -29,24 +29,24 @@ namespace Test.Unit.Services
             var validateTokenRequest = new ValidateTokenRequest(token, _secretKey, false);
 
             // Act
-            var isValid = _sut.ValidateToken(validateTokenRequest);
+            var validatedToken = _sut.ValidateToken(validateTokenRequest);
 
             // Assert
-            Assert.That(isValid, Is.True);
+            Assert.That(validatedToken, Is.Not.Null);
         }
 
 
         [Test]
-        public void ReturnFalseWhenTokenIsNotValid()
+        public void ReturnNullWhenTokenIsNotValid()
         {
             // Arrange
             var validateTokenRequest = new ValidateTokenRequest("Jon Snow", _secretKey, false);
 
             // Act
-            var isValid = _sut.ValidateToken(validateTokenRequest);
+            var validatedToken = _sut.ValidateToken(validateTokenRequest);
 
             // Assert
-            Assert.That(isValid, Is.False);
+            Assert.That(validatedToken, Is.Null);
         }
     }
 }

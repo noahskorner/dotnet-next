@@ -45,7 +45,7 @@ namespace Services.Features.Users.VerifyEmail
         private bool ValidateEmailVerificationToken(string token)
         {
             var request = new ValidateTokenRequest(token, _jwtConfig.EmailVerificationSecret, false);
-            return _jwtService.ValidateToken(request);
+            return _jwtService.ValidateToken(request) != null;
         }
     }
 

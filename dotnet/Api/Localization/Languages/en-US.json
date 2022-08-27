@@ -9,7 +9,8 @@
   "CREATE_USER_PASSWORD_MUST_CONTAIN_SYMBOL": "Password must contain a symbol.",
   "CREATE_USER_PASSWORD_NOT_VALID": "Password must only contain numbers, letters, and symbols (!@#$%^&*()_+=\\[{{]}};:<>|/?,)",
   "VERIFY_EMAIL_INVALID_TOKEN": "Your token was invalid.",
-  "LOGIN_USER_INVALID_EMAIL_OR_PASSWORD": "Incorrect email or password. Please try again.",
+  "LOGIN_INVALID_EMAIL_OR_PASSWORD": "Incorrect email or password. Please try again.",
   "LOGIN_EMAIL_NOT_VALID": "Must provide a valid email",
-  "LOGIN_MUST_PROVIDE_PASSWORD":  "Must provide a password."
+  "LOGIN_MUST_PROVIDE_PASSWORD": "Must provide a password.",
+  "LOGIN_EMAIL_NOT_VERIFIED":  "Please verify your email before logging in."
 }

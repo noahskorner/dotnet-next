@@ -51,7 +51,6 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Api\Auth\Logout\" />
-    <Folder Include="Controllers\Api\Auth\RefreshToken\" />
   </ItemGroup>
 
   <Target Condition="'$(Configuration)'=='Debug|AnyCPU'" Name="PostBuild" AfterTargets="PostBuildEvent">

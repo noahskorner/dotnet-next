@@ -1,4 +1,5 @@
 ﻿using Api.Configuration;
+using Api.Controllers.Api.Auth;
 using Api.Extensions;
 using Api.Localization;
 using FluentValidation;
@@ -79,6 +80,7 @@ namespace Api.Extensions
         {
             services.AddSingleton<IStringLocalizer, JsonStringLocalizer>();
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddSingleton<IAuthHelper, AuthHelper>();
 
             return services;
         }

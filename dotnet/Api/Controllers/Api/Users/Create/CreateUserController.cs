@@ -16,9 +16,7 @@ namespace Api.Controllers.Api.Users.Create
         private readonly IMediator _mediator;
         private readonly IValidator<CreateUserRequest> _validator;
 
-        public CreateUserController(
-            IMediator mediator,
-            IValidator<CreateUserRequest> validator)
+        public CreateUserController(IMediator mediator, IValidator<CreateUserRequest> validator)
         {
             _mediator = mediator;
             _validator = validator;

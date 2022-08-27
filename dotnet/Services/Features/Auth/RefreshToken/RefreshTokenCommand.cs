@@ -1,6 +1,14 @@
-﻿namespace Services.Features.Auth.RefreshToken
+﻿using MediatR;
+
+namespace Services.Features.Auth.RefreshToken
 {
-    internal class RefreshTokenCommand
+    public class RefreshTokenCommand : IRequest<AuthDto>
     {
+        public string RefreshToken { get; }
+
+        public RefreshTokenCommand(string refreshToken)
+        {
+            RefreshToken = refreshToken;
+        }
     }
 }

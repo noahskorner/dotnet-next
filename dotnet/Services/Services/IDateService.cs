@@ -2,6 +2,7 @@
 {
     public interface IDateService
     {
+        DateTimeOffset Now();
         DateTimeOffset UtcNow();
     }
 
@@ -10,6 +11,11 @@
         public DateTimeOffset UtcNow()
         {
             return DateTimeOffset.UtcNow;
+        }
+
+        public DateTimeOffset Now()
+        {
+            return DateTimeOffset.Now;
         }
     }
 

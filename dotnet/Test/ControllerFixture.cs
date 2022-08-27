@@ -8,6 +8,7 @@ using Test.Extensions;
 using Services.Features.Users;
 using Api.Controllers.Api.Users.Create;
 using System.Net.Http.Json;
+using Api.Constants;
 
 namespace Test
 {
@@ -15,6 +16,7 @@ namespace Test
     {
         protected HttpClient _sut;
         protected ApiContext _context;
+        private IServiceProvider _serviceProvider;
 
         [SetUp]
         public void ControllerSetUp()
@@ -34,8 +36,8 @@ namespace Test
                         services.RemoveDep(typeof(ApiContext));
                         services.AddInMemoryDatabase();
 
-                        var serviceProvider = services.BuildServiceProvider();
-                        _context = serviceProvider.GetRequiredService<ApiContext>();
+                        _serviceProvider = services.BuildServiceProvider();
+                        _context = _serviceProvider.GetRequiredService<ApiContext>();
                     });
                 });
 
@@ -48,12 +50,25 @@ namespace Test
             _context.Database.EnsureDeleted();
         }
 
-        protected async Task<UserDto> CreateUser(string email =  "jon.snow@gmail.com", string password = "123456aB$")
+        protected TService GetDep<TService>() where TService : class
+        {
+            return _serviceProvider.GetRequiredService<TService>();
+        }
+
+        protected async Task<UserDto> CreateUser(string email = "jon.snow@gmail.com", string password = "123456aB$", bool isEmailVerified = true)
         {
             var createUserRequest = new CreateUserRequest(email, password);
-            var createUserResult = await _sut.PostAsJsonAsync("v1/user", createUserRequest).AsCreated<UserDto>();
-            
-            return createUserResult.Data;
+            var createUserResult = await _sut.PostAsJsonAsync($"{ApiConstants.ROUTE_PREFIX}/user", createUserRequest).AsCreated<UserDto>();
+            var user = createUserResult.Data;
+
+            if (isEmailVerified)
+            {
+                var userEntity = await _context.User.FindAsync(user.Id);
+                var emailVerificationToken = userEntity?.EmailVerificationToken ?? throw new Exception();
+                await _sut.PutAsync($"{ApiConstants.ROUTE_PREFIX}/user/{user.Id}/verify-email/{emailVerificationToken}", null);
+            }
+
+            return user;
         }
     }
 }

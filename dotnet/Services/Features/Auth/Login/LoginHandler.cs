@@ -1,8 +1,6 @@
 ﻿using Data.Repositories.Users;
 using MediatR;
-using Services.Configuration;
 using Services.Services;
-using System.Security.Claims;
 
 namespace Services.Features.Auth.Login
 {
@@ -10,65 +8,35 @@ namespace Services.Features.Auth.Login
     {
         private readonly IGetUserByEmail _getUserByEmail;
         private readonly IPasswordService _passwordService;
-        private readonly IJwtService _jwtService;
-        private readonly JwtConfiguration _jwtConfig;
-        private readonly IDateService _dateService;
+        private readonly IAuthService _authService;
 
         public LoginHandler(
             IGetUserByEmail getUserByEmail,
             IPasswordService passwordService,
-            IJwtService jwtService,
-            JwtConfiguration jwtConfig,
-            IDateService dateService)
+            IAuthService authService)
         {
             _getUserByEmail = getUserByEmail;
             _passwordService = passwordService;
-            _jwtService = jwtService;
-            _jwtConfig = jwtConfig;
-            _dateService = dateService;
+            _authService = authService;
         }
 
         public async Task<AuthDto> Handle(LoginCommand command, CancellationToken cancellationToken)
         {
             var user = await _getUserByEmail.Execute(command.Email);
             if (user == null) throw new LoginUserNotFoundException(command.Email);
+            if (!user.IsEmailVerified) throw new LoginUserEmailNotVerifiedException(command.Email);
+
 
             var isValidPassword = _passwordService.Verify(command.Password, user.Password);
             if (!isValidPassword) throw new LoginInvalidPasswordException(command.Email);
 
-            var accessToken = GetAccessToken(user.Id, user.Email);
-            var (refreshToken, refreshTokenExpiration) = GetRefreshToken(user.Id, user.Email);
+            var accessToken = _authService.GenerateAccessToken(user.Id, user.Email);
+            var (refreshToken, refreshTokenExpiration) = _authService.GenerateRefreshToken(user.Id, user.Email);
 
             return new AuthDto(
                 accessToken,
                 refreshToken,
                 refreshTokenExpiration);
-        }
-
-        private string GetAccessToken(long userId, string email)
-        {
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-                new Claim(ClaimTypes.Email, email),
-            };
-            var expiresIn = _dateService.UtcNow() + _jwtConfig.AccessTokenExpiresIn;
-            var request = new GenerateTokenRequest(_jwtConfig.AccessTokenSecret, claims, expiresIn);
-
-            return _jwtService.GenerateToken(request);
-        }
-
-        private (string, DateTimeOffset) GetRefreshToken(long userId, string email)
-        {
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-                new Claim(ClaimTypes.Email, email),
-            };
-            var expiresIn = _dateService.UtcNow() + _jwtConfig.RefreshTokenExpiresIn;
-            var request = new GenerateTokenRequest(_jwtConfig.RefreshTokenSecret, claims, expiresIn);
-
-            return (_jwtService.GenerateToken(request), expiresIn);
         }
     }
 
@@ -77,6 +45,16 @@ namespace Services.Features.Auth.Login
         public string Email { get; }
 
         public LoginUserNotFoundException(string email) : base($"User with email {email} does not exist.")
+        {
+            Email = email;
+        }
+    }
+
+    public class LoginUserEmailNotVerifiedException : Exception
+    {
+        public string Email { get; }
+
+        public LoginUserEmailNotVerifiedException(string email) : base($"{email} is not a verified email address.")
         {
             Email = email;
         }

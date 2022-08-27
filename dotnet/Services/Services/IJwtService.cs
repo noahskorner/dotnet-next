@@ -9,7 +9,7 @@ namespace Services.Services
     public interface IJwtService
     {
         string GenerateToken(GenerateTokenRequest request);
-        bool ValidateToken(ValidateTokenRequest request);
+        JwtSecurityToken? ValidateToken(ValidateTokenRequest request);
     }
     public class GenerateTokenRequest
     {
@@ -61,7 +61,7 @@ namespace Services.Services
                 issuer: _jwtConfig.Issuer,
                 audience: _jwtConfig.Audience,
                 claims: request.Claims,
-                notBefore: _dateService.UtcNow().DateTime,
+                notBefore: _dateService.Now().DateTime,
                 expires: request.Expires?.DateTime ?? null,
                 signingCredentials: credentials);
 
@@ -69,7 +69,7 @@ namespace Services.Services
             return handler.WriteToken(securityToken);
         }
 
-        public bool ValidateToken(ValidateTokenRequest request)
+        public JwtSecurityToken? ValidateToken(ValidateTokenRequest request)
         {
             try
             {
@@ -77,11 +77,11 @@ namespace Services.Services
                 var validationParameters = GetValidationParameters(request.SecretKey, request.ValidateLifetime);
                 tokenHandler.ValidateToken(request.Token, validationParameters, out SecurityToken validatedToken);
 
-                return true;
+                return validatedToken as JwtSecurityToken;
             }
             catch
             {
-                return false;
+                return null;
             }
         }
 
@@ -91,6 +91,7 @@ namespace Services.Services
             {
                 ValidAudience = _jwtConfig.Audience,
                 ValidIssuer = _jwtConfig.Issuer,
+                ClockSkew = new TimeSpan(0),
                 ValidateLifetime = validateLifetime,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
             };

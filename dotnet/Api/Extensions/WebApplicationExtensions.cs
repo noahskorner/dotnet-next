@@ -15,6 +15,8 @@ using Api.Localization;
 using Services.Features.Auth.Login;
 using Microsoft.Extensions.Localization;
 using Api.Constants;
+using Api.Controllers.Api.Auth;
+using Services.Features.Auth.RefreshToken;
 
 namespace Api.Extensions
 {
@@ -86,7 +88,16 @@ namespace Api.Extensions
                         case LoginUserNotFoundException userNotFoundException:
                         case LoginInvalidPasswordException invalidPasswordException:
                             statusCode = (int)HttpStatusCode.Unauthorized;
-                            errors.Add(new Error(ErrorType.Exception, localizer.GetString(Errors.LOGIN_USER_INVALID_EMAIL_OR_PASSWORD), key: Errors.LOGIN_USER_INVALID_EMAIL_OR_PASSWORD));
+                            errors.Add(new Error(ErrorType.Exception, localizer.GetString(Errors.LOGIN_INVALID_EMAIL_OR_PASSWORD), key: Errors.LOGIN_INVALID_EMAIL_OR_PASSWORD));
+                            break;
+                        case LoginUserEmailNotVerifiedException loginUserEmailNotVerifiedException:
+                            statusCode = (int)HttpStatusCode.Forbidden;
+                            errors.Add(new Error(ErrorType.Exception, localizer.GetString(Errors.LOGIN_EMAIL_NOT_VERIFIED), key: Errors.LOGIN_EMAIL_NOT_VERIFIED));
+                            break;
+                        case RefreshTokenNotFoundException refreshTokenNotFoundException:
+                        case RefreshTokenInvalidTokenException refreshTokenNotValidException:
+                        case RefreshTokenUserNotFoundException refreshTokenUserNotFoundException:
+                            statusCode = (int)HttpStatusCode.Unauthorized;
                             break;
                         default:
                             errors.Add(new Error(ErrorType.Exception, localizer.GetString(Errors.UNKNOWN), key: Errors.UNKNOWN));

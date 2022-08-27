@@ -1,7 +1,6 @@
 ﻿using Api.Constants;
+using Api.Controllers.Api.Auth;
 using Api.Controllers.Api.Auth.Login;
-using Api.Controllers.Api.Users.Create;
-using Services.Features.Users;
 using System.Net.Http.Json;
 using Test.Extensions;
 
@@ -20,7 +19,7 @@ namespace Test.Integration.Features.Auth.Login
             var request = new LoginRequest(email, "123456aB$");
 
             // Act && Assert
-            await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<LoginResponse>();
+            await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<AuthResponse>();
         }
 
         [TestCase(null)]
@@ -32,7 +31,7 @@ namespace Test.Integration.Features.Auth.Login
             var request = new LoginRequest(email, "123456aB$");
 
             // Act
-            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<LoginResponse>();
+            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<AuthResponse>();
 
             // Assert
             result.ShouldHaveValidationErrorsFor(nameof(LoginRequest.Email));
@@ -46,7 +45,7 @@ namespace Test.Integration.Features.Auth.Login
             var request = new LoginRequest(_faker.Internet.Email(), password);
 
             // Act && Assert
-            await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<LoginResponse>();
+            await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<AuthResponse>();
         }
 
         [TestCase(null)]
@@ -57,7 +56,7 @@ namespace Test.Integration.Features.Auth.Login
             var request = new LoginRequest(_faker.Internet.Email(), password);
 
             // Act
-            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<LoginResponse>();
+            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<AuthResponse>();
 
             // Assert
             result.ShouldHaveValidationErrorsFor(nameof(LoginRequest.Password));
@@ -70,7 +69,7 @@ namespace Test.Integration.Features.Auth.Login
             var request = new LoginRequest(_faker.Internet.Email(), _faker.Internet.Password());
 
             // Act && Assert
-            await _sut.PostAsJsonAsync(BASE_URL, request).AsUnauthorized<LoginResponse>();
+            await _sut.PostAsJsonAsync(BASE_URL, request).AsUnauthorized<AuthResponse>();
         }
 
         [Test]
@@ -80,10 +79,10 @@ namespace Test.Integration.Features.Auth.Login
             var request = new LoginRequest(_faker.Internet.Email(), _faker.Internet.Password());
 
             // Act
-            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsUnauthorized<LoginResponse>();
+            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsUnauthorized<AuthResponse>();
 
             // Assert
-            result.ShouldHaveErrorsFor(nameof(Errors.LOGIN_USER_INVALID_EMAIL_OR_PASSWORD));
+            result.ShouldHaveErrorsFor(Errors.LOGIN_INVALID_EMAIL_OR_PASSWORD);
         }
 
         [Test]
@@ -94,7 +93,7 @@ namespace Test.Integration.Features.Auth.Login
             var request = new LoginRequest(user.Email, _faker.Internet.Password());
 
             // Act && Assert
-            await _sut.PostAsJsonAsync(BASE_URL, request).AsUnauthorized<LoginResponse>();
+            await _sut.PostAsJsonAsync(BASE_URL, request).AsUnauthorized<AuthResponse>();
         }
 
         [Test]
@@ -105,10 +104,37 @@ namespace Test.Integration.Features.Auth.Login
             var request = new LoginRequest(user.Email, _faker.Internet.Password());
 
             // Act
-            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsUnauthorized<LoginResponse>();
+            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsUnauthorized<AuthResponse>();
 
             // Assert
-            result.ShouldHaveErrorsFor(nameof(Errors.LOGIN_USER_INVALID_EMAIL_OR_PASSWORD));
+            result.ShouldHaveErrorsFor(Errors.LOGIN_INVALID_EMAIL_OR_PASSWORD);
+        }
+
+        [Test]
+        public async Task ReturnForbiddenWhenEmailIsNotVerified()
+        {
+            // Arrange
+            var password = "123456aB$";
+            var user = await CreateUser(password: password, isEmailVerified: false);
+            var request = new LoginRequest(user.Email, password);
+
+            // Act && Assert
+            await _sut.PostAsJsonAsync(BASE_URL, request).AsForbidden<AuthResponse>();
+        }
+
+        [Test]
+        public async Task ReturnEmailNotVerifiedErrorWhenEmailIsNotVerified()
+        {
+            // Arrange
+            var password = "123456aB$";
+            var user = await CreateUser(password: password, isEmailVerified: false);
+            var request = new LoginRequest(user.Email, password);
+
+            // Act
+            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsForbidden<AuthResponse>();
+
+            // Assert
+            result.ShouldHaveErrorsFor(Errors.LOGIN_EMAIL_NOT_VERIFIED);
         }
 
         [Test]
@@ -120,7 +146,7 @@ namespace Test.Integration.Features.Auth.Login
             var request = new LoginRequest(user.Email, password);
 
             // Act && Assert
-            await _sut.PostAsJsonAsync(BASE_URL, request).AsCreated<LoginResponse>();
+            await _sut.PostAsJsonAsync(BASE_URL, request).AsCreated<AuthResponse>();
         }
 
         [Test]
@@ -132,7 +158,7 @@ namespace Test.Integration.Features.Auth.Login
             var request = new LoginRequest(user.Email, password);
 
             // Act
-            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsCreated<LoginResponse>();
+            var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsCreated<AuthResponse>();
 
             // Assert
             Assert.That(result.Data.AccessToken, Is.Not.Null);
@@ -143,9 +169,7 @@ namespace Test.Integration.Features.Auth.Login
         {
             // Arrange
             var password = "123456aB$";
-            var createUserRequest = new CreateUserRequest(_faker.Internet.Email(), password);
-            var createUserResult = await _sut.PostAsJsonAsync("v1/user", createUserRequest).AsCreated<UserDto>();
-            var user = createUserResult.Data;
+            var user = await CreateUser(password: password);
             var request = new LoginRequest(user.Email, password);
 
             // Act
@@ -153,9 +177,9 @@ namespace Test.Integration.Features.Auth.Login
 
             // Assert
             var refreshTokenCookie = result.Headers
-                .FirstOrDefault(header => header.Key == "Set-Cookie")
+                .Single(header => header.Key == "Set-Cookie" && header.Value.Where(x => x.Contains(ApiConstants.TOKEN_COOKIE_KEY)).Count() == 1)
                 .Value
-                .FirstOrDefault(x => x.Contains(LoginController.TOKEN_COOKIE_KEY));
+                .Single();
             Assert.That(refreshTokenCookie, Is.Not.Null);
         }
     }

@@ -89,7 +89,7 @@ namespace Test.Integration.Features.Users.Create
             var result = await _sut.PostAsJsonAsync(BASE_URL, request).AsBadRequest<UserDto>();
 
             // Assert
-            result.ShouldHaveErrorsFor(nameof(Errors.CREATE_USER_AREADY_EXISTS));
+            result.ShouldHaveErrorsFor(Errors.CREATE_USER_AREADY_EXISTS);
         }
 
         [Test]
