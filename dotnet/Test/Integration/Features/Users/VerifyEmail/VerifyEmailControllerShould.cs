@@ -1,13 +1,12 @@
-﻿using Api.Controllers.Api.Users.Create;
+﻿using Api.Constants;
 using Services.Features.Users;
-using System.Net.Http.Json;
 using Test.Extensions;
 
 namespace Test.Integration.Features.Users.VerifyEmail
 {
     public class VerifyEmailControllerShould : ControllerFixture
     {
-        private const string BASE_URL = "v1/user";
+        private const string BASE_URL = $"{ApiConstants.ROUTE_PREFIX}/user";
 
         [Test]
         public async Task ReturnNotFoundWhenUserDoesNotExist()

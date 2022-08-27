@@ -9,7 +9,7 @@ namespace Test.Integration.Features.Users.Create
 {
     public class CreateUserControllerShould : ControllerFixture
     {
-        private const string BASE_URL = "v1/user";
+        private const string BASE_URL = $"{ApiConstants.ROUTE_PREFIX}/user";
 
         [Test]
         public async Task ReturnBadRequestWhenEmailIsInvalid()

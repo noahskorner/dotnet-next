@@ -1,4 +1,5 @@
-﻿using Api.Models;
+﻿using Api.Constants;
+using Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Services.Features.Users;
@@ -6,7 +7,7 @@ using Services.Features.Users.VerifyEmail;
 
 namespace Api.Controllers.Api.Users.VerifyEmail
 {
-    [Route("v1/user/{userId}/verify-email")]
+    [Route($"{ApiConstants.ROUTE_PREFIX}/user/{{userId}}/verify-email")]
     [ApiController]
     public class VerifyEmailController : ApiController
     {

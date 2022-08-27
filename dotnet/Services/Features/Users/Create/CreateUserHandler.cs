@@ -3,7 +3,6 @@ using Data.Repositories.Users;
 using MediatR;
 using Services.Configuration;
 using Services.Services;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Services.Features.Users.Create

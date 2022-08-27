@@ -2,7 +2,6 @@
 using Api.Controllers.Api.Auth.Login;
 using Api.Controllers.Api.Users.Create;
 using Services.Features.Users;
-using System.Net;
 using System.Net.Http.Json;
 using Test.Extensions;
 
@@ -10,7 +9,7 @@ namespace Test.Integration.Features.Auth.Login
 {
     public class LoginControllerShould : ControllerFixture
     {
-        private const string BASE_URL = "v1/auth";
+        private const string BASE_URL = $"{ApiConstants.ROUTE_PREFIX}/auth";
 
         [TestCase(null)]
         [TestCase("")]

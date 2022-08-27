@@ -2,7 +2,6 @@
 using MediatR;
 using Services.Configuration;
 using Services.Services;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Services.Features.Auth.Login

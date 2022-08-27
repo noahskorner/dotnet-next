@@ -23,8 +23,8 @@ namespace Api.Extensions
         public static void BuildApi(this WebApplication app)
         {
             app.RunMigrations();
-            app.UseLocalization();
             app.UseSwaggerPage();
+            app.UseLocalization();
             app.UseHttpsRedirection();
             app.UseDefaultExceptionHandler();
             app.MapControllers();

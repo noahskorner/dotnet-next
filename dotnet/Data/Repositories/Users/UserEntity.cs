@@ -1,6 +1,4 @@
-﻿using Data.Repositories;
-
-namespace Data.Repositories.Users
+﻿namespace Data.Repositories.Users
 {
     public class UserEntity : Auditable
     {

@@ -1,4 +1,5 @@
-﻿using Api.Extensions;
+﻿using Api.Constants;
+using Api.Extensions;
 using Api.Models;
 using FluentValidation;
 using MediatR;
@@ -8,7 +9,7 @@ using Services.Features.Users.Create;
 
 namespace Api.Controllers.Api.Users.Create
 {
-    [Route("v1/user")] // TODO: Find a more elegant way to do this
+    [Route($"{ApiConstants.ROUTE_PREFIX}/user")]
     [ApiController]
     public class CreateUserController : ApiController
     {

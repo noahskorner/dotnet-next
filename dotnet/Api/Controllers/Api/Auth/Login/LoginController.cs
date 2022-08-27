@@ -1,4 +1,5 @@
-﻿using Api.Extensions;
+﻿using Api.Constants;
+using Api.Extensions;
 using Api.Models;
 using FluentValidation;
 using MediatR;
@@ -8,7 +9,7 @@ using Services.Features.Auth.Login;
 
 namespace Api.Controllers.Api.Auth.Login
 {
-    [Route("v1/auth")]
+    [Route($"{ApiConstants.ROUTE_PREFIX}/auth")]
     public class LoginController : ApiController
     {
         public const string TOKEN_COOKIE_KEY = "Token";
