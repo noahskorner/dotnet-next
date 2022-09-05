@@ -1,5 +1,4 @@
 ﻿using Api.Configuration;
-using Api.Controllers.Api.Auth;
 using Api.Extensions;
 using Api.Localization;
 using FluentValidation;
@@ -44,7 +43,10 @@ namespace Api.Extensions
         public static IServiceCollection AddMiddleware(this IServiceCollection services)
         {
             services
-                .AddControllers()
+                .AddControllers(options =>
+                {
+                    options.Filters.Add<AuthAttribute>();
+                })
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;

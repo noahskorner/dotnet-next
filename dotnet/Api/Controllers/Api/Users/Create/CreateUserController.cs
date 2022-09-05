@@ -3,6 +3,7 @@ using Api.Extensions;
 using Api.Models;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Features.Users;
 using Services.Features.Users.Create;
@@ -26,6 +27,7 @@ namespace Api.Controllers.Api.Users.Create
         /// Creates a new user.
         /// </summary>
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Post(CreateUserRequest request)
         {

@@ -3,6 +3,7 @@ using Api.Extensions;
 using Api.Models;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Configuration;
 using Services.Features.Auth.Login;
@@ -28,6 +29,7 @@ namespace Api.Controllers.Api.Auth.Login
         /// Creates a login attempt, sets the refresh token secure cookie, and returns the access token.
         /// </summary>
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status201Created)]
 
         public async Task<IActionResult> Post([FromBody] LoginRequest request)

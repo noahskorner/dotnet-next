@@ -1,6 +1,7 @@
 ﻿using Api.Constants;
 using Api.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Features.Users;
 using Services.Features.Users.VerifyEmail;
@@ -22,7 +23,7 @@ namespace Api.Controllers.Api.Users.VerifyEmail
         /// Verifies a users email
         /// </summary>
         [HttpPut("{token}")]
-
+        [AllowAnonymous]
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> Put([FromRoute] long userId, [FromRoute] string token)
         {

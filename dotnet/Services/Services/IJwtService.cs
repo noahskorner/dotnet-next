@@ -39,7 +39,6 @@ namespace Services.Services
         }
     }
 
-
     public class JwtService : IJwtService
     {
         private readonly JwtConfiguration _jwtConfig;

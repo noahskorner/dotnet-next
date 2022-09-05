@@ -1,6 +1,7 @@
 ﻿using Api.Constants;
 using Api.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Configuration;
 using Services.Features.Auth.RefreshToken;
@@ -23,8 +24,8 @@ namespace Api.Controllers.Api.Auth.RefreshToken
         /// Validates the refresh token, resets the refresh token secure cookie, and returns a new access token.
         /// </summary>
         [HttpPut]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
-
         public async Task<IActionResult> Put()
         {
             var command = new RefreshTokenCommand(RefreshToken);
