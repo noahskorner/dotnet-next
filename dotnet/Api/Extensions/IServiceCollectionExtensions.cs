@@ -80,7 +80,6 @@ namespace Api.Extensions
         {
             services.AddSingleton<IStringLocalizer, JsonStringLocalizer>();
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddSingleton<IAuthHelper, AuthHelper>();
 
             return services;
         }

@@ -2,22 +2,21 @@
 using Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Services.Configuration;
 using Services.Features.Auth.RefreshToken;
 
 namespace Api.Controllers.Api.Auth.RefreshToken
 {
     [Route($"{ApiConstants.ROUTE_PREFIX}/auth")]
-    public class RefreshTokenController : ApiController
+    public class RefreshTokenController : AuthController
     {
         private readonly IMediator _mediator;
-        private readonly IAuthHelper _authService;
 
         public RefreshTokenController(
-            IMediator mediator,
-            IAuthHelper authService)
+            AppConfiguration appConfig,
+            IMediator mediator) : base(appConfig)
         {
             _mediator = mediator;
-            _authService = authService;
         }
 
         /// <summary>
@@ -28,11 +27,10 @@ namespace Api.Controllers.Api.Auth.RefreshToken
 
         public async Task<IActionResult> Put()
         {
-            var refreshToken = _authService.GetRefreshToken(Request);
-            var command = new RefreshTokenCommand(refreshToken);
+            var command = new RefreshTokenCommand(RefreshToken);
             var result = await _mediator.Send(command);
 
-            _authService.SetRefreshTokenCookie(Response, result.RefreshToken, result.RefreshTokenExpiration);
+            SetRefreshTokenCookie(Response, result.RefreshToken, result.RefreshTokenExpiration);
             var response = new AuthResponse(result.RefreshToken);
             return Ok(new Result<AuthResponse>(response));
         }
