@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Infrastructure.Services;
+using Microsoft.IdentityModel.Tokens;
 using Services.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

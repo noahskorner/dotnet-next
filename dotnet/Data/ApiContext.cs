@@ -1,4 +1,5 @@
 ﻿using Data.Repositories.Users;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data
@@ -7,7 +8,9 @@ namespace Data
     {
         public DbSet<UserEntity> User { get; set; }
 
-        public ApiContext(DbContextOptions options) : base(options)
+        public ApiContext(
+            DbContextOptions options,
+            IDateService dateService) : base(options, dateService)
         {
         }
 

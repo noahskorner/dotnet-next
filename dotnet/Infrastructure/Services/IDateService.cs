@@ -1,4 +1,4 @@
-﻿namespace Services.Services
+﻿namespace Infrastructure.Services
 {
     public interface IDateService
     {

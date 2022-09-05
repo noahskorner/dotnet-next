@@ -1,12 +1,18 @@
 ﻿using Data.Repositories;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data
 {
     public abstract class Context : DbContext
     {
-        public Context(DbContextOptions options) : base(options)
+        private readonly IDateService _dateService;
+
+        public Context(
+            DbContextOptions options,
+            IDateService dateService) : base(options)
         {
+            _dateService = dateService;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,11 +53,11 @@ namespace Data
 
             foreach (var entityEntry in entries)
             {
-                ((Auditable)entityEntry.Entity).UpdatedAt = DateTimeOffset.UtcNow;
+                ((Auditable)entityEntry.Entity).UpdatedAt = _dateService.UtcNow();
 
                 if (entityEntry.State == EntityState.Added)
                 {
-                    ((Auditable)entityEntry.Entity).CreatedAt = DateTimeOffset.UtcNow;
+                    ((Auditable)entityEntry.Entity).CreatedAt = _dateService.UtcNow();
                 }
             }
         }

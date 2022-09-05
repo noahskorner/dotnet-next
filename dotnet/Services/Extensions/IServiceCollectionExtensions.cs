@@ -45,7 +45,6 @@ namespace Services.Extensions
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSingleton<IJwtService, JwtService>();
             services.AddSingleton<IPasswordService, PasswordService>();
-            services.AddSingleton<IDateService, DateService>();
             services.AddSingleton<IAuthService, AuthService>();
 
             return services;

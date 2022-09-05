@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Data.Configuration;
 using Data.Repositories.Users;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Infrastructure.Extensions;
+using Infrastructure.Services;
 
 namespace Data.Extensions
 {
@@ -11,6 +13,7 @@ namespace Data.Extensions
     {
         public static IServiceCollection RegisterDatabase(this IServiceCollection services, ConfigurationManager configuration)
         {
+            services.RegisterInfrastructure();
             services.AddSqlServer(configuration);
             services.AddServices();
 
@@ -31,11 +34,11 @@ namespace Data.Extensions
 
         public static IServiceCollection AddInMemoryDatabase(this IServiceCollection services)
         {
-            var _contextOptions = new DbContextOptionsBuilder<ApiContext>()
-                .UseInMemoryDatabase("BloggingControllerTest")
+            var contextOptions = new DbContextOptionsBuilder<ApiContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .ConfigureWarnings(b => b.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                 .Options;
-            services.AddSingleton((sp) => new ApiContext(_contextOptions));
+            services.AddSingleton((sp) => new ApiContext(contextOptions, new DateService()));
 
             return services;
         }
