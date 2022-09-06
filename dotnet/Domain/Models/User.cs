@@ -7,5 +7,6 @@
         public string Password { get; private set; }
         public string EmailVerificationToken { get; private set; }
         public bool IsEmailVerified { get; private set; }
+        public IEnumerable<Role> Roles { get; private set; }
     }
 }

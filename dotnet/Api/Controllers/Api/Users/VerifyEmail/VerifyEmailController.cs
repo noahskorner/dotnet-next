@@ -20,7 +20,7 @@ namespace Api.Controllers.Api.Users.VerifyEmail
         }
 
         /// <summary>
-        /// Verifies a users email
+        /// Verifies a users email.
         /// </summary>
         [HttpPut("{token}")]
         [AllowAnonymous]

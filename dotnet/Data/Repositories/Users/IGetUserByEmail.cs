@@ -24,7 +24,10 @@ namespace Data.Repositories.Users
 
         public async Task<User> Execute(string email)
         {
-            var userEntity = await _context.User.AsNoTracking().SingleOrDefaultAsync(x => x.Email == email);
+            var userEntity = await _context.User
+                .Include(x => x.UserRoles)
+                .ThenInclude(x => x.Role)
+                .SingleOrDefaultAsync(x => x.Email == email);
 
             return _mapper.Map<User>(userEntity);
         }

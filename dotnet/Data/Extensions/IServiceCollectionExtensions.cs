@@ -5,7 +5,6 @@ using Data.Configuration;
 using Data.Repositories.Users;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Infrastructure.Extensions;
-using Infrastructure.Services;
 
 namespace Data.Extensions
 {
@@ -38,7 +37,7 @@ namespace Data.Extensions
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .ConfigureWarnings(b => b.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                 .Options;
-            services.AddSingleton((sp) => new ApiContext(contextOptions, new DateService()));
+            services.AddSingleton((sp) => new ApiContext(contextOptions));
 
             return services;
         }

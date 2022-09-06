@@ -31,7 +31,7 @@ namespace Data.Repositories.Users
             entity.Property(x => x.IsEmailVerified)
                   .HasDefaultValue(false);
 
-            entity.HasIndex(x => x.CreatedAt);
+            entity.HasIndex(x => x.CreatedAt);                
         }
     }
 }

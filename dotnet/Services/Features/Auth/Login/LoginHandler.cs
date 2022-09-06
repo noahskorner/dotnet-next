@@ -30,7 +30,7 @@ namespace Services.Features.Auth.Login
             var isValidPassword = _passwordService.Verify(command.Password, user.Password);
             if (!isValidPassword) throw new LoginInvalidPasswordException(command.Email);
 
-            var accessToken = _authService.GenerateAccessToken(user.Id, user.Email);
+            var accessToken = _authService.GenerateAccessToken(user.Id, user.Email, user.Roles);
             var (refreshToken, refreshTokenExpiration) = _authService.GenerateRefreshToken(user.Id, user.Email);
 
             return new AuthDto(

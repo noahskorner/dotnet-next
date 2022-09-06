@@ -10,6 +10,9 @@
 ### Development Setup
 
 ## Todo
+- [ ] Finish Role / ACL Permission based authorization
+    - AclPermissions data attribute
+- [ ] Seed database functionality
 - [ ] Add Rate Limiting
 - [ ] Add Api Caching
 - [ ] Add Prettier / ESLint

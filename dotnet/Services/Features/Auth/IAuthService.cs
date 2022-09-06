@@ -1,4 +1,5 @@
-﻿using Infrastructure.Services;
+﻿using Domain.Models;
+using Infrastructure.Services;
 using Services.Configuration;
 using Services.Services;
 using System.Security.Claims;
@@ -7,7 +8,7 @@ namespace Services.Features.Auth
 {
     public interface IAuthService
     {
-        string GenerateAccessToken(long userId, string email);
+        string GenerateAccessToken(long userId, string email, IEnumerable<Role> roles);
         (string, DateTimeOffset) GenerateRefreshToken(long userId, string email);
     }
 
@@ -27,13 +28,16 @@ namespace Services.Features.Auth
             _jwtService = jwtService;
         }
 
-        public string GenerateAccessToken(long userId, string email)
+        public string GenerateAccessToken(long userId, string email, IEnumerable<Role> roles)
         {
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 new Claim(ClaimTypes.Email, email),
             };
+            claims.AddRange(roles.Select(x => new Claim(ClaimTypes.Role, x.Name)));
+            
+
             var expiresIn = _dateService.Now() + _jwtConfig.AccessTokenExpiresIn;
             var request = new GenerateTokenRequest(_jwtConfig.AccessTokenSecret, claims, expiresIn);
 

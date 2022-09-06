@@ -31,7 +31,7 @@ namespace Services.Features.Auth.RefreshToken
             var user = await _getUserById.Execute(userId);
             if (user == null) throw new RefreshTokenUserNotFoundException(userId);
 
-            var accessToken = _authService.GenerateAccessToken(user.Id, user.Email);
+            var accessToken = _authService.GenerateAccessToken(user.Id, user.Email, user.Roles);
             var (refreshToken, refreshTokenExpiration) = _authService.GenerateRefreshToken(user.Id, user.Email);
 
             return new AuthDto(accessToken, refreshToken, refreshTokenExpiration);
