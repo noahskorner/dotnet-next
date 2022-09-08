@@ -66,7 +66,7 @@ namespace Test.Integration.Features.Auth.RefreshToken
         public async Task ReturnOkWhenTokenIsValid()
         {
             // Arrange
-            var request = await CreateAndLoginUser();
+            var request = await CreateAndLoginUser(HttpMethod.Put, BASE_URL);
 
             // Act && Assert
             await _sut.SendAsync(request).AsOk<AuthResponse>();
@@ -76,7 +76,7 @@ namespace Test.Integration.Features.Auth.RefreshToken
         public async Task ReturnAccessTokenWhenTokenIsValid()
         {
             // Arrange
-            var request = await CreateAndLoginUser();
+            var request = await CreateAndLoginUser(HttpMethod.Put, BASE_URL);
 
             // Act
             var result = await _sut.SendAsync(request).AsOk<AuthResponse>();
@@ -89,7 +89,7 @@ namespace Test.Integration.Features.Auth.RefreshToken
         public async Task SetHttpOnlyRefreshTokenCookie()
         {
             // Arrange
-            var request = await CreateAndLoginUser();
+            var request = await CreateAndLoginUser(HttpMethod.Put, BASE_URL);
 
             // Act
             var response = await _sut.SendAsync(request);
@@ -106,7 +106,7 @@ namespace Test.Integration.Features.Auth.RefreshToken
         public async Task SetNewHttpOnlyRefreshTokenCookie()
         {
             // Arrange
-            var request = await CreateAndLoginUser();
+            var request = await CreateAndLoginUser(HttpMethod.Put, BASE_URL);
             var originalRefreshTokenCookie = request.Headers
                 .Single(header => header.Key == "Cookie" && header.Value.Where(x => x.Contains(ApiConstants.TOKEN_COOKIE_KEY)).Count() == 1)
                 .Value
@@ -123,21 +123,5 @@ namespace Test.Integration.Features.Auth.RefreshToken
             Assert.That(originalRefreshTokenCookie, Is.Not.EqualTo(actual));
         }
 
-        private async Task<HttpRequestMessage> CreateAndLoginUser()
-        {
-            var password = "123456aB$";
-            var user = await CreateUser(password: password);
-            var loginRequest = new LoginRequest(user.Email, password);
-            var loginResponse = await _sut.PostAsJsonAsync(BASE_URL, loginRequest);
-            var refreshTokenCookieValue = loginResponse.Headers
-                .Single(header => header.Key == "Set-Cookie" && header.Value.Where(x => x.Contains(ApiConstants.TOKEN_COOKIE_KEY)).Count() == 1)
-                .Value
-                .Single();
-            var refreshToken = refreshTokenCookieValue.Split('=')[1].Split(';')[0];
-            var request = new HttpRequestMessage(HttpMethod.Put, BASE_URL);
-            request.Headers.Add("Cookie", $"{ApiConstants.TOKEN_COOKIE_KEY}={refreshToken};");
-
-            return request;
-        }
     }
 }

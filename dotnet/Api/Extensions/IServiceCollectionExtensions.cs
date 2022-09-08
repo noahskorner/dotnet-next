@@ -45,7 +45,7 @@ namespace Api.Extensions
             services
                 .AddControllers(options =>
                 {
-                    //options.Filters.Add<AuthAttribute>();
+                    options.Filters.Add<AuthAttribute>();
                 })
                 .AddJsonOptions(options =>
                 {

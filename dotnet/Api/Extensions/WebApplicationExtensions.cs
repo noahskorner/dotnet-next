@@ -28,6 +28,7 @@ namespace Api.Extensions
             app.UseSwaggerPage();
             app.UseLocalization();
             app.UseHttpsRedirection();
+            app.UseMiddleware<AuthMiddleware>();
             app.UseDefaultExceptionHandler();
             app.MapControllers();
         }

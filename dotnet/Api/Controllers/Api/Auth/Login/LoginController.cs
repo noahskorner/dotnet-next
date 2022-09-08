@@ -39,7 +39,7 @@ namespace Api.Controllers.Api.Auth.Login
             var result = await _mediator.Send(command);
 
             SetRefreshTokenCookie(Response, result.RefreshToken, result.RefreshTokenExpiration);
-            var response = new AuthResponse(result.RefreshToken);
+            var response = new AuthResponse(result.AccessToken);
             return Created(new Result<AuthResponse>(response));
         }
     }

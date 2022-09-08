@@ -36,7 +36,6 @@ namespace Services.Features.Auth
                 new Claim(ClaimTypes.Email, email),
             };
             claims.AddRange(roles.Select(x => new Claim(ClaimTypes.Role, x.Name)));
-            
 
             var expiresIn = _dateService.Now() + _jwtConfig.AccessTokenExpiresIn;
             var request = new GenerateTokenRequest(_jwtConfig.AccessTokenSecret, claims, expiresIn);

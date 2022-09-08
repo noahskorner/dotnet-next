@@ -1,9 +1,11 @@
 ﻿using Data.Repositories.Users;
 using Domain.Models;
+using Microsoft.Extensions.Primitives;
 using Services.Configuration;
 using Services.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace Api.Controllers.Api.Auth
 {
@@ -18,14 +20,13 @@ namespace Api.Controllers.Api.Auth
 
         public async Task Invoke(HttpContext context, JwtConfiguration jwtConfig, IJwtService jwtService, IGetUserById getUserById)
         {
-            var token = context.Request.Headers["Authorization"].First().Split(" ").Last();
-            var request = new ValidateTokenRequest(token, jwtConfig.AccessTokenSecret, true);
-
-            var jwtSecurityToken = jwtService.ValidateToken(request);
-            var user = await GetUserFromToken(jwtSecurityToken, getUserById);
-            if (user != null)
+            if (context.Request.Headers.TryGetValue("Authorization", out StringValues authHeaders))
             {
-                context.Items["User"] = user;
+                var token = context.Request.Headers["Authorization"].First().Split(" ").Last();
+                var request = new ValidateTokenRequest(token, jwtConfig.AccessTokenSecret, true);
+
+                var jwtSecurityToken = jwtService.ValidateToken(request);
+                context.Items["User"] = await GetUserFromToken(jwtSecurityToken, getUserById);
             }
 
             await _next(context);
@@ -35,7 +36,7 @@ namespace Api.Controllers.Api.Auth
         {
             if (jwtSecurityToken == null) return null;
 
-            var userIdClaim = jwtSecurityToken.Claims.Single(x => x.ValueType == ClaimTypes.NameIdentifier);
+            var userIdClaim = jwtSecurityToken.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier);
             if (userIdClaim == null) return null;
 
             if (!long.TryParse(userIdClaim.Value, out long userId)) return null;

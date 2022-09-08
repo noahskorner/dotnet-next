@@ -9,6 +9,9 @@ using Services.Features.Users;
 using Api.Controllers.Api.Users.Create;
 using System.Net.Http.Json;
 using Api.Constants;
+using Api.Controllers.Api.Auth.Login;
+using Api.Controllers.Api.Auth;
+using Api.Models;
 
 namespace Test
 {
@@ -69,6 +72,27 @@ namespace Test
             }
 
             return user;
+        }
+
+        protected async Task<HttpRequestMessage> CreateAndLoginUser(HttpMethod httpMethod, string requestUri)
+        {
+            var authUrl = $"{ApiConstants.ROUTE_PREFIX}/auth";
+            var password = "123456aB$";
+            var user = await CreateUser(password: password);
+            var loginRequest = new LoginRequest(user.Email, password);
+            var loginResponse = await _sut.PostAsJsonAsync(authUrl, loginRequest);
+            var content = await loginResponse.Content.ReadAsStringAsync();
+            var authResponse = await loginResponse.Content.ReadFromJsonAsync<Result<AuthResponse>>() ?? throw new ArgumentNullException();
+            var refreshTokenCookieValue = loginResponse.Headers
+                .Single(header => header.Key == "Set-Cookie" && header.Value.Where(x => x.Contains(ApiConstants.TOKEN_COOKIE_KEY)).Count() == 1)
+                .Value
+                .Single();
+            var refreshToken = refreshTokenCookieValue.Split('=')[1].Split(';')[0];
+            var request = new HttpRequestMessage(httpMethod, requestUri);
+            request.Headers.Add("Cookie", $"{ApiConstants.TOKEN_COOKIE_KEY}={refreshToken};");
+            request.Headers.Add("Authorization", $"Bearer {authResponse.Data.AccessToken}");
+
+            return request;
         }
     }
 }
