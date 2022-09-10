@@ -18,7 +18,7 @@ namespace Test.Integration.Features.Auth.Logout
         public async Task ReturnOkWhenUserIsLoggedIn()
         {
             // Arrange
-            var request = await CreateAndLoginUser(HttpMethod.Delete, BASE_URL);
+            var (request, _) = await CreateAndLoginUser(HttpMethod.Delete, BASE_URL);
 
             // Act && Assert
             await _sut.SendAsync(request).AsOk();

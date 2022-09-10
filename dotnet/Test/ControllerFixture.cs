@@ -74,7 +74,7 @@ namespace Test
             return user;
         }
 
-        protected async Task<HttpRequestMessage> CreateAndLoginUser(HttpMethod httpMethod, string requestUri)
+        protected async Task<(HttpRequestMessage, UserDto)> CreateAndLoginUser(HttpMethod httpMethod, string requestUri = "")
         {
             var authUrl = $"{ApiConstants.ROUTE_PREFIX}/auth";
             var password = "123456aB$";
@@ -92,7 +92,7 @@ namespace Test
             request.Headers.Add("Cookie", $"{ApiConstants.TOKEN_COOKIE_KEY}={refreshToken};");
             request.Headers.Add("Authorization", $"Bearer {authResponse.Data.AccessToken}");
 
-            return request;
+            return (request, user);
         }
     }
 }

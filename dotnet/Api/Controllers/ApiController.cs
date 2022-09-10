@@ -15,7 +15,7 @@ namespace Api.Controllers
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
-        public CreatedResult Created([ActionResultObjectValue] object? value)
+        protected CreatedResult Created([ActionResultObjectValue] object? value)
         {
             return Created(string.Empty, value);
         }

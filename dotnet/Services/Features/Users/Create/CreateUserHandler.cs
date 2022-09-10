@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace Services.Features.Users.Create
 {
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
+    public class CreateUserHandler : IRequestHandler<CreateUserCommand, UserDto>
     {
         private readonly JwtConfiguration _jwtConfig;
         private readonly IPasswordService _passwordService;
@@ -17,7 +17,7 @@ namespace Services.Features.Users.Create
         private readonly IMapper _mapper;
         private readonly IPublisher _publisher;
 
-        public CreateUserCommandHandler(
+        public CreateUserHandler(
             IPasswordService passwordService,
             JwtConfiguration jwtConfig,
             IJwtService jwtService,

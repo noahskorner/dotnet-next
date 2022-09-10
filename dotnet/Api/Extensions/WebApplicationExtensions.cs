@@ -17,6 +17,7 @@ using Microsoft.Extensions.Localization;
 using Api.Constants;
 using Api.Controllers.Api.Auth;
 using Services.Features.Auth.RefreshToken;
+using Services.Features.Users.Get;
 
 namespace Api.Extensions
 {
@@ -99,6 +100,9 @@ namespace Api.Extensions
                         case RefreshTokenInvalidTokenException refreshTokenNotValidException:
                         case RefreshTokenUserNotFoundException refreshTokenUserNotFoundException:
                             statusCode = (int)HttpStatusCode.Unauthorized;
+                            break;
+                        case UserIdDoesNotMatchRouteIdException userIdDoesNotMatchRouteIdException:
+                            statusCode = (int)HttpStatusCode.Forbidden;
                             break;
                         default:
                             errors.Add(new Error(ErrorType.Exception, localizer.GetString(Errors.UNKNOWN), key: Errors.UNKNOWN));
