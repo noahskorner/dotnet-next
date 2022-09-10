@@ -18,16 +18,6 @@ namespace Data
             base.OnModelCreating(modelBuilder);
         }
 
-        public override int SaveChanges()
-        {
-            throw new NotImplementedException("Use SaveChangesAsync instead.");
-        }
-
-        public override int SaveChanges(bool acceptAllChangesOnSuccess)
-        {
-            throw new NotImplementedException("Use SaveChangesAsync instead.");
-        }
-
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             OnBeforeSaveChanges();

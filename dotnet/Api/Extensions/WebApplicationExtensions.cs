@@ -18,6 +18,7 @@ using Api.Constants;
 using Api.Controllers.Api.Auth;
 using Services.Features.Auth.RefreshToken;
 using Services.Features.Users.Get;
+using Data.Seeds;
 
 namespace Api.Extensions
 {
@@ -26,6 +27,7 @@ namespace Api.Extensions
         public static void BuildApi(this WebApplication app)
         {
             app.RunMigrations();
+            app.SeedDatabase();
             app.UseSwaggerPage();
             app.UseLocalization();
             app.UseHttpsRedirection();
@@ -140,6 +142,15 @@ namespace Api.Extensions
                 {
                     context.Database.Migrate();
                 }
+            }
+        }
+
+        public static void SeedDatabase(this WebApplication app)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApiContext>();
+                context.SeedDatabase();
             }
         }
     }

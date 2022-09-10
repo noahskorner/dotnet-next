@@ -1,5 +1,6 @@
 ﻿using Data.Repositories.UserRoles;
 using Data.Repositories.Users;
+using Data.Seeds;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data
