@@ -1,11 +1,10 @@
 ﻿using Data.Repositories.Users;
-using Domain.Models;
+using Domain.Models.Users;
 using Microsoft.Extensions.Primitives;
 using Services.Configuration;
-using Services.Services;
+using Services.Features.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace Api.Controllers.Api.Auth
 {

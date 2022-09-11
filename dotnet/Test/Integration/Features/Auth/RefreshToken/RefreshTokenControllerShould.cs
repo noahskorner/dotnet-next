@@ -1,10 +1,7 @@
 ﻿using Api.Constants;
 using Api.Controllers.Api.Auth;
-using Api.Controllers.Api.Auth.Login;
 using Services.Configuration;
 using Services.Features.Auth;
-using Services.Services;
-using System.Net.Http.Json;
 using System.Security.Claims;
 using Test.Extensions;
 

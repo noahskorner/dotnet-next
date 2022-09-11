@@ -12,13 +12,13 @@
 ## Todo
 - [ ] Finish Role / ACL Permission based authorization
     - AclPermissions data attribute
-- [ ] Seed database functionality
 - [ ] Add Rate Limiting
 - [ ] Add Api Caching
 - [ ] Add Prettier / ESLint
 - [ ] Add Jest / Cypress
 - [ ] Add Redis for in memory caching
 - [ ] Add git hooks for formatting / running tests
+- [x] Seed database functionality
 - [x] Add Logging Service
 - [x] Fix swagger page
 - [x] Add Date service for mocking

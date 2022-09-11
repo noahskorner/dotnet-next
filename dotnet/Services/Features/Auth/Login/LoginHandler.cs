@@ -1,22 +1,19 @@
 ﻿using Data.Repositories.Users;
+using Domain.Models.Users;
 using MediatR;
-using Services.Services;
 
 namespace Services.Features.Auth.Login
 {
     public class LoginHandler : IRequestHandler<LoginCommand, AuthDto>
     {
         private readonly IGetUserByEmail _getUserByEmail;
-        private readonly IPasswordService _passwordService;
         private readonly IAuthService _authService;
 
         public LoginHandler(
             IGetUserByEmail getUserByEmail,
-            IPasswordService passwordService,
             IAuthService authService)
         {
             _getUserByEmail = getUserByEmail;
-            _passwordService = passwordService;
             _authService = authService;
         }
 
@@ -27,7 +24,7 @@ namespace Services.Features.Auth.Login
             if (!user.IsEmailVerified) throw new LoginUserEmailNotVerifiedException(command.Email);
 
 
-            var isValidPassword = _passwordService.Verify(command.Password, user.Password);
+            var isValidPassword = User.CheckPassword(command.Password, user.Password);
             if (!isValidPassword) throw new LoginInvalidPasswordException(command.Email);
 
             var accessToken = _authService.GenerateAccessToken(user.Id, user.Email, user.Roles);

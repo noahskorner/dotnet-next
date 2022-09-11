@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Data.Extensions;
 using Services.Providers.MailProvider;
 using Services.Configuration;
-using Services.Services;
 using Services.Features.Auth;
 
 namespace Services.Extensions
@@ -44,7 +43,6 @@ namespace Services.Extensions
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSingleton<IJwtService, JwtService>();
-            services.AddSingleton<IPasswordService, PasswordService>();
             services.AddSingleton<IAuthService, AuthService>();
 
             return services;

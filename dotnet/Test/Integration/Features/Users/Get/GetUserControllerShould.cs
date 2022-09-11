@@ -2,7 +2,7 @@
 using Services.Features.Users;
 using Test.Extensions;
 
-namespace Test.Integration.Features.Users.Create
+namespace Test.Integration.Features.Users.Get
 {
     public class GetUserControllerShould : ControllerFixture
     {

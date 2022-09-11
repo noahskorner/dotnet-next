@@ -1,7 +1,7 @@
 ﻿using Api.Constants;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers.Api.Auth.Login
+namespace Api.Controllers.Api.Auth.Logout
 {
     [Route($"{ApiConstants.ROUTE_PREFIX}/auth")]
     public class LogoutController : ApiController

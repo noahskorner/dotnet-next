@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Services;
 using Services.Configuration;
-using Services.Services;
+using Services.Features.Auth;
 using System.Security.Claims;
 
 namespace Test.Unit.Services

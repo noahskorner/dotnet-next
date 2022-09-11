@@ -1,18 +1,11 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 
-namespace Services.Services
+namespace Domain.Models.Users
 {
-    public interface IPasswordService
+    public partial class User
     {
-        string Hash(string password);
-
-        bool Verify(string password, string actualPassword);
-    }
-
-    public class PasswordService : IPasswordService
-    {
-        public string Hash(string password)
+        public static string HashPassword(string password)
         {
             if (password.Contains(".")) throw new InvalidPasswordException();
 
@@ -24,7 +17,7 @@ namespace Services.Services
             return $"{hashedPassword}.{base64Salt}";
         }
 
-        public bool Verify(string password, string hashedPassword)
+        public static bool CheckPassword(string password, string hashedPassword)
         {
             try
             {
@@ -45,7 +38,7 @@ namespace Services.Services
             }
         }
 
-        private string HashString(string str, byte[] salt)
+        private static string HashString(string str, byte[] salt)
         {
             return Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: str,

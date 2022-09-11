@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Data.Repositories.UserRoles;
-using Domain.Models;
+using Domain.Models.Users;
 
 namespace Data.Repositories.Users
 {

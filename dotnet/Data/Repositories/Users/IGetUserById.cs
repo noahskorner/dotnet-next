@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Domain.Models;
+using Domain.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories.Users

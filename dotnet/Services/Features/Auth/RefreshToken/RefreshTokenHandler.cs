@@ -1,7 +1,6 @@
 ﻿using Data.Repositories.Users;
 using MediatR;
 using Services.Configuration;
-using Services.Services;
 using System.Security.Claims;
 
 namespace Services.Features.Auth.RefreshToken

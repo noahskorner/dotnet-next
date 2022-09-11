@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Data.Repositories.Users;
+using Domain.Models.Users;
 using MediatR;
 using Services.Configuration;
-using Services.Services;
+using Services.Features.Auth;
 using System.Security.Claims;
 
 namespace Services.Features.Users.Create
@@ -10,7 +11,6 @@ namespace Services.Features.Users.Create
     public class CreateUserHandler : IRequestHandler<CreateUserCommand, UserDto>
     {
         private readonly JwtConfiguration _jwtConfig;
-        private readonly IPasswordService _passwordService;
         private readonly IJwtService _jwtService;
         private readonly IGetUserByEmail _getUserByEmail;
         private readonly ICreateUser _createUser;
@@ -18,7 +18,6 @@ namespace Services.Features.Users.Create
         private readonly IPublisher _publisher;
 
         public CreateUserHandler(
-            IPasswordService passwordService,
             JwtConfiguration jwtConfig,
             IJwtService jwtService,
             IGetUserByEmail getUserByEmail,
@@ -26,7 +25,6 @@ namespace Services.Features.Users.Create
             IMapper mapper,
             IPublisher publisher)
         {
-            _passwordService = passwordService;
             _jwtConfig = jwtConfig;
             _jwtService = jwtService;
             _getUserByEmail = getUserByEmail;
@@ -40,7 +38,8 @@ namespace Services.Features.Users.Create
             var existingUser = await _getUserByEmail.Execute(command.Email);
             if (existingUser != null) throw new CreateUserAlreadyExistsException();
 
-            var hashedPassword = _passwordService.Hash(command.Password);
+
+            var hashedPassword = User.HashPassword(command.Password);
             var emailVerificationToken = GetEmailVerificationToken(command.Email);
             var user = await _createUser.Execute(command.Email, hashedPassword, emailVerificationToken);
 

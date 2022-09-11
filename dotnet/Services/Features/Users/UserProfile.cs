@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Domain.Models;
+using Domain.Models.Users;
 
 namespace Services.Features.Users
 {

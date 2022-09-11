@@ -1,6 +1,6 @@
-﻿namespace Domain.Models
+﻿namespace Domain.Models.Users
 {
-    public class User
+    public partial class User
     {
         public long Id { get; private set; }
         public string Email { get; private set; }

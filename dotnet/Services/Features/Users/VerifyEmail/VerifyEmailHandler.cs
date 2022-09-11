@@ -2,7 +2,7 @@
 using Data.Repositories.Users;
 using MediatR;
 using Services.Configuration;
-using Services.Services;
+using Services.Features.Auth;
 
 namespace Services.Features.Users.VerifyEmail
 {
