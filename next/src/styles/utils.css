@@ -3,3 +3,9 @@
   height: 0;
   background: transparent;
 }
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
